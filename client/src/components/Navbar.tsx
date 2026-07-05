@@ -26,10 +26,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   }, []);
 
   const navLinks = [
-    { name: 'Home', view: 'home' as const },
-    { name: 'Team', view: 'team' as const },
-    { name: 'Speakers', view: 'speakers' as const },
-    { name: 'Schedule', view: 'schedule' as const },
+    { name: 'بداية السمت', view: 'home' as const },
+    { name: 'بنائين السمت', view: 'team' as const },
+    { name: 'صناع السمت', view: 'speakers' as const },
+    { name: 'جدولنا ', view: 'schedule' as const },
   ];
 
   return (
@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
           >
             <span className="font-oswald text-2xl font-bold">
               <span className="text-red-600">TEDx</span>
-              <span className="text-white">Amman Arab University</span>
+              <span className="text-white">Shmeisani</span>
             </span>
           </div>
 

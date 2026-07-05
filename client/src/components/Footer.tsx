@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-20">
           <span className="font-oswald text-4xl font-bold mb-8 block">
-            <span className="text-red-600">TEDx</span>Amman Arab University
+            <span className="text-red-600">TEDx</span>Shmeisani
           </span>
           <p className="text-gray-400 max-w-sm mb-10 leading-relaxed text-lg font-light">
             Independently organized TED event. Bringing visionaries together at
@@ -20,8 +20,7 @@ const Footer: React.FC = () => {
             under license from TED.
           </p>
           <p className="text-xs text-gray-400 font-medium mb-2">
-            &copy; {new Date().getFullYear()} TEDxAmman Arab University. Ideas Worth
-            Spreading.
+            &copy; {new Date().getFullYear()} TEDx Shmeisani.
           </p>
           <p className="text-xs text-gray-500">
             Developed by Skyfall Enterprises

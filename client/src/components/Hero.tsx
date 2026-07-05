@@ -20,15 +20,12 @@ const Hero: React.FC<HeroProps> = ({ onSeeSpeakers }) => {
 
       <div className="relative z-10 text-center px-4 max-w-5xl">
         <h2 className="text-red-600 font-bold tracking-[0.4em] mb-6 uppercase text-xl md:text-2xl">
-          TEDx Amman Arab University
+          TEDx shmeisani
         </h2>
         <h1 className="text-white text-6xl md:text-9xl font-extrabold mb-8 leading-none tracking-tighter">
-          The Power Of <span className="text-red-600">Difference</span>
+          كل طريق ببدا  <span className="text-red-600">بنقطة</span>
         </h1>
-        <p className="text-gray-300 text-lg md:text-3xl mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-          Ideas worth spreading at the gateway of continents.
-        </p>
-
+      
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
           <button
             onClick={onSeeSpeakers}

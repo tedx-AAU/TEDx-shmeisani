@@ -10,11 +10,8 @@ const TeamPage: React.FC = () => {
             The Engine
           </h2>
           <h1 className="text-6xl md:text-8xl font-oswald font-extrabold tracking-tight">
-            OUR <span className="text-red-600">TEAM</span>
+             بنائين <span className="text-red-600"> السمت</span>
           </h1>
-          <p className="mt-8 text-gray-400 max-w-2xl mx-auto text-xl font-light">
-            The passionate minds working behind the scenes to make TEDxAmman Arab University a reality.
-          </p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center">

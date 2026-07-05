@@ -17,17 +17,22 @@ const OrganizerSection: React.FC = () => {
         </div>
         <div className="lg:col-span-7 space-y-8">
           <h2 className="text-red-600 font-oswald text-lg font-bold tracking-widest uppercase">
-            The Organizer
+            أهلاً فيكم برحلة “سَمْت”.
           </h2>
-          <h3 className="text-5xl md:text-6xl font-oswald font-bold">
-            {ORGANIZER.name}
-          </h3>
-          <p className="text-red-500 text-xl font-bold tracking-tight uppercase">
-            {ORGANIZER.role}
+         
+          <p className="text-white text-xl font-bold tracking-tight uppercase">
+           عالمنا مش دايماً واضح، وأحياناً بنحس حالنا تايهين… بس يمكن هذا الضياع هو بداية طريقنا الحقيقي.<br/>
+           ممكن نكون بمرحلة شك أو ارتباك، وهذا طبيعي.<br/>
+           بس جهّزوا حالكم نمشي داخل الضباب، ونكتشف “نقطة” جديدة بداخل كل واحد فينا.<br/>
+           رح نمر على 9 نقاط، وكل نقطة رسمت سمتها بطريقتها الخاصة.<br/>
+           استعدوا تلاقوا سمتكم الخاص.<br/>
+
           </p>
           <div className="h-1 w-20 bg-red-600"></div>
           <p className="text-gray-400 text-xl leading-relaxed font-light italic">
-            "{ORGANIZER.bio}"
+          Saif AL-shul <br/>
+          Licence holder 
+
           </p>
         </div>
       </div>
