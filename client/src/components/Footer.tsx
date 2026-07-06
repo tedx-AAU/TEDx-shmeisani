@@ -9,8 +9,7 @@ const Footer: React.FC = () => {
             <span className="text-red-600">TEDx</span>Shmeisani
           </span>
           <p className="text-gray-400 max-w-sm mb-10 leading-relaxed text-lg font-light">
-            Independently organized TED event. Bringing visionaries together at
-            the geographic gateway of the world.
+            Location:<a href=" https://maps.app.goo.gl/a3HKhBVbSpbWcxrg9" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline">  Shmeisani— Amman, Jordan</a>
           </p>
         </div>
 

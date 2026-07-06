@@ -381,97 +381,147 @@ export const TEAM_MEMBERS: TeamMember[] = [
 
 ];
 
-export const SCHEDULE: ScheduleItem[] = [
+export const SCHEDULE_TEDX: ScheduleItem[] = [
   {
-    time: '8:45–9:45 AM',
-    title: 'Registration and guest reception',
+    time: '8:00–10:00 AM',
+    title: 'Registration and guest arrival',
     description:''
   },
   {
-    time: '9:45–10:00 AM',
-    title: 'Event Opening',
+    time: '10:00–10:30 AM',
+    title: 'Opening ceremony',
     description: '',
   },
   {
-    time: '10:00–10:18 AM',
-    title: 'Speaker 1',
-    description: 'Farah Oweis',
+    time: '10:30–10:45 AM',
+    title: 'Talk 1',
+    description: '',
   },
   {
-    time: '10:18–10:36 AM',
-    title: 'Speaker 2',
-    description: 'Mohammad Nabhan',
+    time: '10:50–11:05 AM',
+    title: 'Talk 2',
+    description: '',
     speakerId: '',
   },
   {
-    time: '10:36–10:54 AM',
-    title: 'Speaker 3',
-    description: 'Haneen Al Tamimi',
+    time: '11:10–11:25 AM',
+    title: 'Talk 3',
+    description: '',
   },
   {
-    time: '10:54–11:12 AM',
-    title: 'Speaker 4',
-    description: 'Hamza Al Khlaifat',
+    time: '11:25–11:35 AM',
+    title: 'Speaker appreciation',
+    description: 'Group 1',
   },
   {
-    time: '11:12–11:32 AM',
-    title: 'Activity 1',
-    description: 'Dania Kfouf'
+    time: '11:35–12:35AM',
+    title: 'Coffee Break & Networking',
+    description: '',
   },
   {
-    time: '11:32-11:47 AM',
-    title: 'Session 1 Awards',
+    time: '12:35-12:50 AM',
+    title: 'Talk 4',
     description: ''
   },
   {
-    time: '11:47 AM -12:07 PM',
-    title: 'Break',
+    time: '12:55 AM -01:10 PM',
+    title: 'Talk 5',
     description: '',
   },
   {
-    time: '12:07-12:25 PM',
-    title: 'Speaker 5',
-    description: 'Heba Ibrawish',
+    time: '1:15-01:30 PM',
+    title: 'Talk 6',
+    description: '',
   },
   {
-    time: '12:25-12:43 PM',
-    title: 'Speaker 6',
-    description: 'Hamza Abu Khdair',
+    time: '01:30-01:40PM',
+    title: 'Speaker appreciation',
+    description: 'Group 2',
   },
   {
-    time: '12:43-1:01 PM',
-    title: 'Speaker 7',
-    description: 'Wesam Alkresheh',
+    time: '01:40-02:40 PM',
+    title: 'Lunch Break & Experience Zone',
+    description: '',
   },
   {
-    time: '1:01-1:19 PM',
-    title: 'Speaker 8',
-    description: 'Selena Rabab’ah',
+    time: '2:45-03:15 PM',
+    title: 'Music Performance',
+    description: '',
   },
   {
-    time: '1:19-1:34 PM',
-    title: 'Session 2 Awards',
+    time: '03:15-03:45 PM',
+    title: 'Talk 7',
     description:''
   },
   {
-    time: '1:34-1:54 PM',
-    title: 'Break',
+    time: '03:50-04:05PM',
+    title: 'Talk 8',
     description: '',
   },
    {
-    time: '1:54-2:14 PM',
-    title: 'Activity 2',
+    time: '04:10-04:20PM',
+    title: 'Q&A Session',
     description: 'Qusai Mlhem',
   },
    {
-    time: '2:14-3:04 PM',
-    title: 'Closing & Awards Ceremony',
+    time: '04:25-04:40PM',
+    title: 'Talk 9',
     description: '',
   },
    {
-    time: '3:04-4:00 PM',
-    title: 'Lunch',
+    time: '04:40-04:50PM',
+    title: 'Speaker appreciation',
+    description: 'Group 3',
+  },
+
+    {
+    time: '04:50-05:10PM',
+    title: 'Closing Ceremony',
+    description: 'Includes Sponsor Appreciation ',
+  }, 
+  {
+    time: '05:10-05:40PM',
+    title: 'Networking & Photo Session',
     description: '',
   },
 
 ];
+export const SCHEDULE_PRE_TEDX = [ 
+  {
+    time: '10:30 AM –12:00 PM',
+    title: 'Registration and Check-in',
+    description:'Guest arrival,badge collection,welcome music & light networking',
+  },
+  {
+    time: '12:00–12:30 PM',
+    title: 'Introduction of the day',
+    description: 'Welcome speech, agenda overview, Tedx guidelines & setting the tone ',
+  },
+  {
+    time: '12:30–01:30 PM',
+    title: 'Session 1',
+    description: '',
+  },
+  {
+    time: '01:30–02:00 PM',
+    title: 'Break',
+    description: 'Networking & refreshments',
+    speakerId: '',
+  },
+  {
+    time: '02:15–03:15 PM',
+    title: 'Session 2',
+    description: '',
+  },
+  {
+    time: '03:15-4:15 PM',
+    title: 'Break',
+    description: 'Lunch,Experience Zone & Networking activities',
+  },
+  {
+    time: '4:30-5:50 PM',
+    title: 'Final Session',
+    description: ''
+  },
+  
+ ]; 

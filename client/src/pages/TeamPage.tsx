@@ -6,11 +6,9 @@ const TeamPage: React.FC = () => {
     <div className="bg-black text-white min-h-screen pt-20 pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="text-center mb-24">
-          <h2 className="text-red-600 font-oswald text-xl font-bold tracking-[0.5em] uppercase mb-4">
-            The Engine
-          </h2>
+         
           <h1 className="text-6xl md:text-8xl font-oswald font-extrabold tracking-tight">
-             بنائين <span className="text-red-600"> السمت</span>
+             بنّائين <span className="text-red-600"> السمت</span>
           </h1>
         </header>
 
