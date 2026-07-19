@@ -1,4 +1,5 @@
 import React from 'react';
+import licenceImg from '../assets/images/licence.jpg';
 
 const About: React.FC = () => {
   return (
@@ -48,14 +49,14 @@ const About: React.FC = () => {
         <div className="relative order-1 lg:order-2">
           <div className="aspect-square rounded-3xl overflow-hidden border-4 border-white/5 shadow-2xl">
             <img
-              src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+              src={licenceImg}
               alt="TEDx Atmosphere"
               className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
             />
           </div>
           <div className="absolute -bottom-10 -left-10 bg-red-600 text-white p-10 rounded-2xl shadow-2xl max-w-sm hidden md:block border border-white/10">
-            <p className="text-2xl font-bold italic leading-tight mb-2">
-              "Ideas that bridge the straits of the mind."
+            <p className="text-2xl font-bold leading-tight mb-2">
+              "كل شخص عنده قصة، فكرة، أو تجربة تستحق إنها تُسمع."
             </p>
             <p className="text-sm opacity-70 uppercase tracking-widest font-bold">
               — Curator’s Note

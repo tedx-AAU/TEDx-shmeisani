@@ -1,6 +1,4 @@
 import React from 'react';
-import backgroundImage from '../assets/images/IMG_0329.png';
-
 interface HeroProps {
   onSeeSpeakers: () => void;
 }
@@ -9,12 +7,15 @@ const Hero: React.FC<HeroProps> = ({ onSeeSpeakers }) => {
   return (
     <div className="relative h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div
+    {/*
+      <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{
           backgroundImage: `url(${backgroundImage})`,
         }}
       />
+       */}
+      
       {/* Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black z-1" />
 

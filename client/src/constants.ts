@@ -12,13 +12,8 @@ import speaker2 from './assets/images/8.jpg';
 import speaker3 from './assets/images/7.jpg';
 import speaker4 from './assets/images/6.jpg';
 import speaker5 from './assets/images/3.jpg';
-import speaker6 from './assets/images/1.jpg';
-import speaker7 from './assets/images/11.jpg';
-import speaker8 from './assets/images/4.jpg';
-import speaker9 from './assets/images/2.jpg';
-import speaker10 from './assets/images/9.jpg';
-import speaker11 from './assets/images/haytham.jpg';
-import speaker12 from './assets/images/29.jpg';
+import speaker6 from './assets/images/9.jpg';
+import speaker7 from './assets/images/1.jpg';
 
 // Import team member images
 import organizerImg from './assets/images/24.jpg';
@@ -35,31 +30,23 @@ import team9 from './assets/images/17.jpg';
 import team10 from './assets/images/15.jpg';
 import team11 from './assets/images/18.jpg';
 import team12 from './assets/images/16.jpg';
-import team13 from './assets/images/29.jpg';
 
 // Import partner logos
 import partnerGold1 from './assets/images/31.png';
-import partnerGold5 from './assets/images/Cpartner.png';
-import partnerGold2 from './assets/images/32.png';
-import partnerGold3 from './assets/images/33.png';
-import partnerGold4 from './assets/images/34.jpeg';
-import partnerSilver1 from './assets/images/35.jpeg';
-import partnerSilver2 from './assets/images/36.jpeg';
-import partnerSilver3 from './assets/images/42.jpeg';
-import partnerMedia2 from './assets/images/38.jpeg';
-import partnerGold6 from './assets/images/37.png';
-import partnerGold7 from './assets/images/46.png';
-import partnerGold8 from './assets/images/30.jpeg';
-import partnerGold9 from './assets/images/28.jpg';
-import partnerGold10 from './assets/images/27.jpg';
-import partnerGold11 from './assets/images/26.jpg';
-import partnerGold12 from './assets/images/14.jpg';
-import partnerGold13 from './assets/images/5.jpg';
+import partnerGold5 from './assets/images/Hia.png';
+import partnerGold2 from './assets/images/امنية.png';
+import partnerGold3 from './assets/images/غرفة صناعة عمان.png';
+import partnerGold4 from './assets/images/انكل اوساكا.png';
+import partnerSilver4 from './assets/images/بلدنا.png';
+import partnerSilver1 from './assets/images/دوناتري.jpg';
+import partnerSilver2 from './assets/images/snips.png';
+import partnerSilver3 from './assets/images/كناري.png';
+
 
 export const SPEAKERS: Speaker[] = [
   {
     id: '1',
-    name: 'Haneen Tamimi',
+    name: 'Dana Mufleh',
    title:
       '',
     speechTitle:
@@ -70,7 +57,7 @@ export const SPEAKERS: Speaker[] = [
   },
   {
     id: '2',
-    name: 'Farah Owais',
+    name: 'DR.Fawaz Abd Alhaq',
     title: '',
     speechTitle:
       '',
@@ -80,7 +67,7 @@ export const SPEAKERS: Speaker[] = [
   },
   {
     id: '3',
-    name: 'Mohammad Nabhan',
+    name: 'Hamzah Bayan',
     title:
       '',
     speechTitle:
@@ -92,7 +79,7 @@ export const SPEAKERS: Speaker[] = [
   },
   {
     id: '4',
-    name: 'Wesam Alkaresheh',
+    name: 'Lana Qusous',
     title:
       '',
     speechTitle: '',
@@ -103,7 +90,7 @@ export const SPEAKERS: Speaker[] = [
  
   {
     id: '5',
-    name: 'Selena Rabab’ah',
+    name: 'Lorans Almansi',
     title: '',
     speechTitle: '',
     bio: '',
@@ -114,74 +101,26 @@ export const SPEAKERS: Speaker[] = [
 
   {
     id: '6',
-    name: 'Hamza Abu Khdair',
+    name: 'Mohammad Maharmeh',
     title:
       '',
     speechTitle: '',
     bio: '',
-    imageUrl: speaker10,
+    imageUrl: speaker6,
     category: '',
   },
   
   {
     id: '7',
-    name: 'Hamza Alkhlaifat',
+    name: 'Nabeel Sawalha',
     title:
       '',
     speechTitle:
       '',
     bio: '',
-    imageUrl: speaker6,
-    category: '',
-  },
-  {
-    id: '8',
-    name: 'Heba Ibrawish',
-    title: '',
-    speechTitle: '',
-    bio: '',
     imageUrl: speaker7,
     category: '',
-  },
-  {
-    id: '9',
-    name: 'Diana Kfouf',
-    title: '',
-    speechTitle: '',
-    bio: '',
-    imageUrl: speaker8,
-    category: '',
-  },
-  {
-    id: '10',
-    name: 'Qusai Melhem',
-    title: '',
-    speechTitle:
-      '',
-    bio: "",
-    imageUrl: speaker9,
-    category: '',
-  },
-  {
-    id: '11',
-    name: 'Haitham Baroudi',
-    title: '',
-    speechTitle:
-      '',
-    bio: "",
-    imageUrl: speaker11,
-    category: '',
-  },
-  {
-    id: '12',
-    name: 'Sameera Dweik',
-    title: '',
-    speechTitle:
-      '',
-    bio: "",
-    imageUrl: speaker12,
-    category: '',
-  },
+  }
 ];
 
 export const ORGANIZER: Organizer = {
@@ -192,97 +131,56 @@ export const ORGANIZER: Organizer = {
 };
 
 export const PARTNERS: Partner[] = [
-  // Platinum Tier
+  // Platinum
   {
     name: 'SKYFALL ENTERPRISES',
     logoUrl: partnerGold1,
     tier: 'Platinum',
   },
 {
-    name: 'Correct',
+    name: 'مركز هيا',
     logoUrl: partnerGold5,
     tier: 'Platinum',
   },
-
-
- //Gold
   {
-    name: 'Solvenear',
-    logoUrl: partnerGold2,
-    tier: 'Gold',
-  },
-  {
-    name: 'Quantum energy pendant',
+    name: 'غرفة صناعة عمان',
     logoUrl: partnerGold3,
-    tier: 'Gold',
+    tier: 'Platinum',
   },
+    {
+    name: 'امنية',
+    logoUrl: partnerGold2,
+    tier: 'Platinum',
+  },
+
+ //gold
+
   {
-    name: 'Annubala',
+    name: 'انكل اوساكا',
     logoUrl: partnerGold4,
     tier: 'Gold',
   },
  
   {
-    name: 'Partner 1',
+    name: 'دونارتي',
     logoUrl: partnerSilver1,
     tier: 'Gold',
   },
   {
-    name: 'Partner 2',
+    name: 'snips',
     logoUrl: partnerSilver2,
     tier: 'Gold',
   },
   {
-    name: 'شينالكو',
+    name: 'كناري',
     logoUrl: partnerSilver3,
     tier: 'Gold',
   },
-
- {
-    name: 'شبابيك',
-    logoUrl: partnerMedia2,
-    tier: 'Gold',
-  },
    {
-    name: 'Don pioi',
-    logoUrl: partnerGold6,
+    name: 'بلدنا',
+    logoUrl: partnerSilver4,
     tier: 'Gold',
-  },
-    {
-    name: 'Mythic',
-    logoUrl: partnerGold7,
-    tier: 'Gold',
-  },
-      {
-    name: 'Petra',
-    logoUrl: partnerGold8,
-    tier: 'Gold',
-  },
-        {
-    name: 'الرأي',
-    logoUrl: partnerGold9,
-    tier: 'Gold',
-  },
-         {
-    name: 'injaz news',
-    logoUrl: partnerGold10,
-    tier: 'Gold',
-  },
-       {
-    name: 'kayan',
-    logoUrl: partnerGold11,
-    tier: 'Gold',
-  },
-       {
-    name: 'Random',
-    logoUrl: partnerGold12,
-    tier: 'Gold',
-  },
-         {
-    name: 'TAG',
-    logoUrl: partnerGold13,
-    tier: 'Gold',
-  },
+  }
 ];
 
 export const TEAM_MEMBERS: TeamMember[] = [

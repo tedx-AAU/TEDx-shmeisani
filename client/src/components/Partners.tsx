@@ -21,6 +21,8 @@ const PartnersSection: React.FC = () => {
       {/* Section Header */}
       <div className="relative text-center mb-24 z-10">
         <h2 className="text-red-600 font-oswald text-xl font-bold tracking-[0.2em] uppercase mb-4">
+          <br/>
+          <br/>
           Our Support Network
         </h2>
         <h3 className="text-5xl md:text-7xl font-oswald font-bold text-white uppercase tracking-tight">
