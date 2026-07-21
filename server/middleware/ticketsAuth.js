@@ -32,7 +32,7 @@ const ticketsAuthMiddleware = async (req, res, next) => {
     }
 
     // Verify the admin has the correct role
-    if (ticketsAdmin.role !== 'ticketsAdmin') {
+    if (ticketsAdmin.role !== 'ticketsAdmin' && ticketsAdmin.role !== 'admin') {
       return res
         .status(403)
         .json({ error: 'Access denied. Invalid ticket admin role.' });

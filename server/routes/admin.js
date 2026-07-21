@@ -2,16 +2,21 @@ const express = require('express');
 const router = express.Router();
 const Admin = require('../models/Admin'); 
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt'); 
+const ticketsAuthMiddleware = require('../middleware/ticketsAuth');
 
-
-router.get('/tickets-verify', async (req, res) => {
+router.get('/tickets-verify', ticketsAuthMiddleware, async (req, res) => {
   try {
-    res.json({ message: 'Token is valid' });
+    res.json({ 
+      message: 'Token is valid',
+      ticketsAdmin: { id: req.ticketsAdmin._id, username: req.ticketsAdmin.username, role: req.ticketsAdmin.role }
+    });
   } catch (error) {
     res.status(401).json({ error: 'Invalid token' });
   }
 });
-// (Login)
+
+
 router.post('/tickets-login', async (req, res) => {
   const { username, password } = req.body;
   console.log("login by ticket name", username);
@@ -21,12 +26,23 @@ router.post('/tickets-login', async (req, res) => {
 
     if (!admin) {
       console.log("user not found");
-      return res.status(401).json({ error: 'User not found' });
+      return res.status(401).json({ error: 'Invalid username or password' });
     }
 
-    
+   
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) {
+      console.log("password incorrect");
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+
     const token = jwt.sign(
-      { id: admin._id, role: admin.role }, 
+      { 
+        id: admin._id, 
+        ticketsAdminId: admin._id,
+        role: admin.role,
+        userType: 'ticketsAdmin'
+      }, 
       process.env.JWT_SECRET || 'secret123', 
       { expiresIn: '1d' }
     );
@@ -36,7 +52,8 @@ router.post('/tickets-login', async (req, res) => {
     return res.json({
       success: true,
       token,
-      admin: { id: admin._id, username: admin.username, role: admin.role }
+      admin: { id: admin._id, username: admin.username, role: admin.role },
+      ticketsAdmin: { id: admin._id, username: admin.username, role: admin.role }
     });
 
   } catch (err) {

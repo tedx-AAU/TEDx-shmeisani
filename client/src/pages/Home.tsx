@@ -10,7 +10,10 @@ const Home: React.FC = () => {
 
   return (
     <div className="bg-black">
-      <Hero onSeeSpeakers={() => navigate('/speakers')} />
+        <Hero 
+        onSeeSpeakers={() => navigate('/speakers')} 
+        onGetTickets={() => navigate('/tickets')} 
+      />
       <About />
       
       <OrganizerSection />

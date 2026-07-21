@@ -1,4 +1,5 @@
 import CssBaseline from '@mui/material/CssBaseline';
+import Booking from './pages/Booking';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 import {
@@ -18,6 +19,7 @@ import TicketsManagement from './pages/TicketsManagement';
 import SpeakersPage from './pages/SpeakersPage';
 import SchedulePage from './pages/SchedulePage';
 import TeamPage from './pages/TeamPage';
+import TicketsPage from './pages/TicketsPage';
 import Home from './pages/Home'; 
 
 const theme = createTheme({
@@ -52,11 +54,12 @@ const RouterContent: React.FC = () => {
       <ScrollToTop />
       <Routes>
         <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/tickets" element={<Navigate to="/" replace />} />
-          <Route path="/speakers" element={<SpeakersPage />} />
-          <Route path="/schedule" element={<SchedulePage />} />
-          <Route path="/team" element={<TeamPage />} />
+        <Route path="/" element={<Home />} /> 
+        <Route path="/tickets" element={<Booking />} />
+        <Route path="/speakers" element={<SpeakersPage />} />
+        <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/team" element={<TeamPage />} />
+        <Route path="/tickets" element={<TicketsPage />} />
         </Route>
 
         <Route path="/tickets-login" element={<TicketsLogin />} /> 
@@ -80,6 +83,7 @@ const PublicLayout: React.FC = () => {
     if (path.startsWith('/team')) return 'team';
     if (path.startsWith('/tickets-login')) return 'tickets-login';
     if (path.startsWith('/tickets-management')) return 'tickets-management';
+    if (path.startsWith('/tickets')) return 'tickets';
     return 'home';
   }, [location.pathname]);
 
@@ -91,12 +95,14 @@ const PublicLayout: React.FC = () => {
       | 'team'
       | 'tickets-login'
       | 'tickets-management'
+      | 'tickets'
   ) => {
     const routes: Record<typeof view, string> = {
       home: '/',
       speakers: '/speakers',
       schedule: '/schedule',
       team: '/team',
+      tickets: '/tickets',
       'tickets-login': '/tickets-login',
       'tickets-management': '/tickets-management',
     };

@@ -126,6 +126,7 @@ const TicketsManagement: React.FC = () => {
           null,
           token || undefined
         );
+        console.log("Registrations API:", response);
         setRegistrations(response?.data || []);
         setTotalPages(response?.totalPages || 1);
       } catch (error) {

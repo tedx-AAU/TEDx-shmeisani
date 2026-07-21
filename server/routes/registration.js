@@ -1,474 +1,378 @@
 const express = require('express');
+const router = express.Router();
 const Registration = require('../models/Registration');
 const Ticket = require('../models/Ticket');
-const nodemailer = require('nodemailer');
+const { sendTicketsEmail } = require('../config/email');
 const QRCode = require('qrcode');
+const sharp = require('sharp');
 const path = require('path');
-const { createCanvas, loadImage, registerFont } = require('canvas');
-const { sendCustomEmail } = require('../config/email');
-
-const router = express.Router();
-
-// In-memory OTP storage with expiration (5 minutes)
-const otpStore = new Map();
-
-// Clean up expired OTPs every minute
-setInterval(() => {
-   const now = Date.now();
-  for (const [email, otpData] of otpStore.entries()) {
-    if (otpData.expiresAt < now) {
-      otpStore.delete(email);
-    }
-  }
-}, 60000); // Run every minute
+const crypto = require('crypto');
+const ticketsAuthMiddleware = require('../middleware/ticketsAuth');
 
 router.get('/tickets/available', async (req, res) => {
-  try {
-    const ticket = await Ticket.findOne();
-
-    if (!ticket) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'No tickets found!' });
-    }
-
-    res.status(200).json({
-      success: true,
-      numberOfTickets: ticket.numberOfTickets,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
+  try {
+    const tickets = await Ticket.find();
+  
+    let totalMax = 0;
+    let totalSold = 0;
+    tickets.forEach(t => {
+      totalMax += t.maxCapacity || 0;
+      totalSold += t.soldCount || 0;
+    });
+    res.json({ 
+      success: true,
+      numberOfTickets: totalMax - totalSold,
+      available: totalMax - totalSold, 
+      tickets 
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.patch('/tickets/add', async (req, res) => {
-  try {
-    const { numberOfTickets } = req.body;
-
-    if (!numberOfTickets || numberOfTickets <= 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Invalid number of tickets' });
-    }
-
-    const ticket = await Ticket.findOne();
-
-    if (!ticket) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'No ticket document found!' });
-    }
-
-    ticket.numberOfTickets += numberOfTickets;
-    await ticket.save();
-
-    res.status(200).json({
-      success: true,
-      message: 'Tickets added successfully!',
-      numberOfTickets: ticket.numberOfTickets,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-router.get('/registrations/export', async (req, res) => {
-  try {
-    const { status } = req.query;
-
-    const query = {
-      ...(status && { status }),
-    };
-
-    const registrations = await Registration.find(query).sort({
-      createdAt: -1,
-    });
-
-    res.status(200).json({
-      success: true,
-      data: registrations,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
 
 router.get('/registrations/accepted/count', async (req, res) => {
-  try {
-    const acceptedCount = await Registration.countDocuments({
-      status: 'Accepted',
-    });
-
-    res.status(200).json({
-      success: true,
-      totalAccepted: acceptedCount,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
+  try {
+    const count = await Registration.countDocuments({ status: { $in: ['Completed', 'Accepted'] } });
+    res.json({ 
+      success: true,
+      totalAccepted: count,
+      count 
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.get('/registrations', async (req, res) => {
-  try {
-    const { page = 1, limit = 10, search, status } = req.query;
-
-    const skip = (page - 1) * limit;
-
-    const query = {
-      ...(search && {
-        $or: [
-          { customerNumber: parseInt(search) },
-          { phoneNumber: { $regex: search, $options: 'i' } },
-        ],
-      }),
-      ...(status && { status }),
-    };
-
-    const registrations = await Registration.find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit));
-
-    const totalRegistrations = await Registration.countDocuments(query);
-
-    res.status(200).json({
-      success: true,
-      data: registrations,
-      total: totalRegistrations,
-      page: parseInt(page),
-      totalPages: Math.ceil(totalRegistrations / limit),
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-router.patch('/registrations/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    const updatedRegistration = await Registration.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
-
-    if (!updatedRegistration) {
-      return res.status(404).json({ message: 'Registration not found' });
-    }
-
-    if (status === 'Rejected') {
-      const ticket = await Ticket.findOne();
-
-      if (ticket) {
-        ticket.numberOfTickets += updatedRegistration?.numberOfTickets;
-        await ticket.save();
-      }
-    }
-
-   if (status === 'Accepted') {
-    try {
-        const qrCodeDataUrl = await QRCode.toDataURL(
-            updatedRegistration.customerNumber.toString()
-        );
-
-        const fontPath = path.join(__dirname, '../assets/fonts/ARIAL.TTF');
-        registerFont(fontPath, { family: 'Arial' });
-
-        const ticketTemplatePath = path.join(__dirname, '../assets/images/tick.png');
-        const ticketImage = await loadImage(ticketTemplatePath);
-
-        const canvas = createCanvas(ticketImage.width, ticketImage.height);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(ticketImage, 0, 0);
-
-        ctx.font = 'bold 70px Arial';
-        ctx.fillStyle = '#FFFFFF';
-       ctx.font = 'bold 40px Arial'; 
-      ctx.fillStyle = '#FFFFFF';    
-ctx.fillText(
-  `${updatedRegistration?.fullName} (${updatedRegistration?.numberOfTickets})`, 
-          80,   
-          680 
-);
-
-        const qrCodeImage = await loadImage(qrCodeDataUrl);
-        ctx.drawImage(qrCodeImage, 772, 855,230 ,230);
-
-        const finalTicketBuffer = canvas.toBuffer();
-
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: 'tedxammanarabuniversity@gmail.com',
-                pass: 'nskyucujhfgwqujn', 
-            },
-        });
-
-        const mailOptions = {
-            from: 'tedxammanarabuniversity@gmail.com',
-            to: updatedRegistration.email,
-            subject: 'TEDxAmman Arab University Ticket Confirmation',
-            html: `<p>Dear ${updatedRegistration.fullName},</p>
-                   <p>Thank you for registering. Please find your ticket attached.</p>`,
-            attachments: [
-                {
-                    filename: 'ticket.png',
-                    content: finalTicketBuffer,
-                    contentType: 'image/png',
-                },
-            ],
-        };
-
-        await transporter.sendMail(mailOptions);
-        console.log('Ticket sent successfully!');
-    } catch (emailError) {
-        console.error('Failed to generate or send ticket:', emailError);
-       
+router.get('/registrations', ticketsAuthMiddleware, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || '';
+    const status = req.query.status || '';
+    
+    const query = {};
+    if (search) {
+      query.$or = [
+        { fullName: { $regex: search, $options: 'i' } },
+        { phoneNumber: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } }
+      ];
     }
-}
 
-    res.status(200).json({ success: true, data: updatedRegistration });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
+    if (status) {
+      if (status === 'Accepted') {
+        query.status = { $in: ['Accepted', 'Completed'] };
+      } else if (status === 'Rejected') {
+        query.status = { $in: ['Rejected', 'Failed'] };
+      } else {
+        query.status = status;
+      }
+    }
+
+    const total = await Registration.countDocuments(query);
+    const registrations = await Registration.find(query)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    const mappedRegistrations = registrations.map((reg, idx) => {
+      const doc = reg.toObject();
+      if (doc.status === 'Completed') {
+        doc.status = 'Accepted';
+      } else if (doc.status === 'Failed') {
+        doc.status = 'Rejected';
+      }
+      if (!doc.customerNumber) {
+        doc.customerNumber = 1000 + (total - ((page - 1) * limit + idx));
+      }
+      return doc;
+    });
+
+    res.json({
+      success: true,
+      data: mappedRegistrations,
+      registrations: mappedRegistrations,
+      totalPages: Math.ceil(total / limit),
+      pagination: {
+        total,
+        page,
+        pages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / limit)
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
-
-// Send OTP to email
-router.post('/send-otp', async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    if (!email) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Email is required' });
-    }
-
-    const normalizedEmail = email.toLowerCase().trim();
-
-    // Generate 4-digit OTP
-    const otp = Math.floor(1000 + Math.random() * 9000).toString();
-
-    // Store OTP with expiration (5 minutes)
-    otpStore.set(normalizedEmail, {
-      otp,
-      expiresAt: Date.now() + 5 * 60 * 1000, // 5 minutes
-    });
-
-    // Send OTP via email
-    const emailSubject = 'TEDxAmman Arab University - Email Verification Code';
-    const emailMessage = `Your verification code is: ${otp}\n\nThis code will expire in 5 minutes.\n\nIf you didn't request this code, please ignore this email.`;
-
-    const emailResult = await sendCustomEmail(
-      normalizedEmail,
-      emailSubject,
-      emailMessage
-    );
-
-    if (!emailResult.success) {
-      return res.status(500).json({
-        success: false,
-        message: 'Failed to send OTP. Please try again.',
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'OTP sent successfully to your email',
-    });
-  } catch (error) {
-    console.error('Error sending OTP:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-// Verify OTP
-router.post('/verify-otp', async (req, res) => {
-  try {
-    const { email, otp } = req.body;
-
-    if (!email || !otp) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email and OTP are required',
-      });
-    }
-
-    const normalizedEmail = email.toLowerCase().trim();
-    const otpData = otpStore.get(normalizedEmail);
-
-    if (!otpData) {
-      return res.status(400).json({
-        success: false,
-        message: 'OTP not found or expired. Please request a new OTP.',
-      });
-    }
-
-    if (otpData.expiresAt < Date.now()) {
-      otpStore.delete(normalizedEmail);
-      return res.status(400).json({
-        success: false,
-        message: 'OTP has expired. Please request a new OTP.',
-      });
-    }
-
-    if (otpData.otp !== otp) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid OTP. Please try again.',
-      });
-    }
-
-    // OTP verified successfully - mark as verified (keep for 10 more minutes)
-    otpStore.set(normalizedEmail, {
-      otp: otpData.otp,
-      expiresAt: Date.now() + 10 * 60 * 1000, // Extend for 10 minutes
-      verified: true,
-    });
-
-    res.status(200).json({
-      success: true,
-      message: 'OTP verified successfully',
-    });
-  } catch (error) {
-    console.error('Error verifying OTP:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-router.post('/register', async (req, res) => {
-  try {
-    const formData = req.body;
-
-    // Normalize email to lowercase for uniqueness check
-    const normalizedEmail = formData.email?.toLowerCase().trim();
-
-    /*
-    // Verify OTP was verified before allowing registration
-    const otpData = otpStore.get(normalizedEmail);
-    if (!otpData || !otpData.verified) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email verification required. Please verify your email first.',
-      });
-    }
-
-    // Check if OTP verification has expired (10 minutes after verification)
-    if (otpData.expiresAt < Date.now()) {
-      otpStore.delete(normalizedEmail);
-      return res.status(400).json({
-        success: false,
-        message: 'Email verification expired. Please verify your email again.',
-      });
-    }
-    */
-
-    // Check if email already exists
-    const existingRegistration = await Registration.findOne({
-      email: normalizedEmail,
-    });
-
-    if (existingRegistration) {
-      return res.status(400).json({
-        success: false,
-        message:
-          'This email is already registered. Please use a different email address.',
-      });
-    }
-
-    const ticket = await Ticket.findOne();
-
-    if (!ticket || ticket.numberOfTickets < formData.numberOfTickets) {
-      return res
-        .status(201)
-        .json({ success: false, message: 'No tickets available!' });
-    }
-
-    ticket.numberOfTickets -= formData.numberOfTickets;
-    await ticket.save();
-
-    const lastRegistration = await Registration.findOne().sort({
-      createdAt: -1,
-    });
-
-    const newCustomerNumber = lastRegistration
-      ? lastRegistration.customerNumber + 1
-      : 1000;
-
-    formData.customerNumber = newCustomerNumber;
-    formData.email = normalizedEmail; // Use normalized email
-
-    const newRegistration = new Registration(formData);
-    await newRegistration.save();
-
-    // Clean up OTP after successful registration
-    otpStore.delete(normalizedEmail);
-
-    res
-      .status(201)
-      .json({ success: true, message: 'Registration successful!' });
-  } catch (error) {
-    console.error(error);
-
-    // Handle MongoDB duplicate key error
-    if (error.code === 11000 && error.keyPattern?.email) {
-      return res.status(400).json({
-        success: false,
-        message:
-          'This email is already registered. Please use a different email address.',
-      });
-    }
-
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-
 
 router.post('/', async (req, res) => {
   try {
-    const formData = req.body;
-    console.log("recive new data.", formData.email);
+    const {
+      fullName,
+      phoneNumber,
+      email,
+      address,
+      isStudent,
+      university,
+      gender,
+      age,
+      heard,
+      about,
+      ticketType, 
+      numberOfTickets,
+      attendees 
+    } = req.body;
 
-  
-    const ticket = await Ticket.findOne();
-    if (!ticket || ticket.numberOfTickets < (formData.numberOfTickets || 1)) {
-      return res.status(400).json({ success: false, message: 'no enough tickets' });
+    const ticketInventory = await Ticket.findOne({ ticketType });
+    // ملحوظة: إذا كان جدول الـ Ticket يُستخدم كـ Inventory فقط، سنبحث عن نوع التذكرة، 
+    // ولكن لوحة التحكم قد تكون بحاجة لإنشاء تذاكر فرعية للمستخدمين فيه، سنعالج ذلك بالأسفل.
+
+    let processedAttendees = [];
+    if (attendees && attendees.length > 0) {
+      processedAttendees = attendees.map(attendee => ({
+        fullName: attendee.name || attendee.fullName || fullName,
+        name: attendee.name || attendee.fullName || fullName,
+        email: attendee.email || email,
+        phone: attendee.phone || phoneNumber,
+        gender: attendee.gender || gender,
+        age: attendee.age || age,
+        isStudent: attendee.isStudent !== undefined ? attendee.isStudent : isStudent,
+        university: attendee.university || university || '-',
+        ticketCode: `TEDX-SHM-${crypto.randomBytes(4).toString('hex').toUpperCase()}`,
+        isCheckedIn: false
+      }));
+    } else {
+      processedAttendees.push({
+        fullName: fullName,
+        name: fullName,
+        email: email,
+        phone: phoneNumber,
+        gender: gender,
+        age: age,
+        isStudent: isStudent,
+        university: university || '-',
+        ticketCode: `TEDX-SHM-${crypto.randomBytes(4).toString('hex').toUpperCase()}`,
+        isCheckedIn: false
+      });
     }
 
+    const priceEach = ticketInventory ? ticketInventory.price : 0;
+    const totalAmount = priceEach * numberOfTickets;
 
-    ticket.numberOfTickets -= (formData.numberOfTickets || 1);
-    await ticket.save();
+    // Calculate customerNumber dynamically on creation
+    const registrationCount = await Registration.countDocuments();
+    const customerNumber = 1000 + registrationCount + 1;
 
-   
-    const lastRegistration = await Registration.findOne().sort({ createdAt: -1 });
-    const newCustomerNumber = lastRegistration ? lastRegistration.customerNumber + 1 : 1000;
-
-    
+    // 1. حفظ التسجيل الرئيسي
     const newRegistration = new Registration({
-      ...formData,
-      customerNumber: newCustomerNumber,
-      status: 'Pending' 
+      customerNumber,
+      fullName,
+      phoneNumber,
+      email,
+      address,
+      isStudent,
+      university: university || '-',
+      gender,
+      age,
+      heard,
+      about,
+      ticketType,
+      numberOfTickets,
+      attendees: processedAttendees,
+      totalAmount,
+      status: 'Completed' 
     });
 
     await newRegistration.save();
-    console.log("saved in mongo");
 
-    res.status(201).json({ success: true, message: 'Registration successful and saved!' });
+    // 2. تحديث المخزون إذا كان موجوداً
+    if (ticketInventory) {
+      ticketInventory.soldCount += numberOfTickets;
+      await ticketInventory.save();
+    }
+
+    // ⭐ إصلاح لوحة التحكم: إنشاء مستند تذكرة لكل حاضر داخل جدول الـ Ticket (إذا كانت اللوحة تقرأ منه)
+    // إذا كانت اللوحة تتوقع سطر منفصل لكل شخص للحضور والـ Check-in:
+    for (const attendee of processedAttendees) {
+      try {
+        // نقوم بإنشاء سجل التذكرة للحاضر لكي تظهر في الـ Management
+        await Ticket.create({
+          ticketCode: attendee.ticketCode,
+          holderName: attendee.fullName,
+          email: attendee.email,
+          phone: attendee.phone,
+          ticketType: ticketType,
+          status: 'Active',
+          isCheckedIn: false,
+          registrationId: newRegistration._id
+        }).catch(() => {
+          // تفادي أي خطأ إذا كانت الـ Schema للـ Ticket مختلفة، لكي لا يتوقف السيرفر
+          console.log("Ticket creation skipped or model structure differs.");
+        });
+      } catch (e) {
+        console.error("Error creating individual ticket record:", e);
+      }
+    }
+
+    const ticketAttachments = [];
+    const templateName = ticketType === 'full' ? 'fullpath.jpeg' : 'pre.jpeg';
+    const templatePath = path.join(__dirname, `../assets/images/${templateName}`);
+
+    // 3. توليد الصور والـ QR بدقة ومكان ثابتين
+    for (let i = 0; i < processedAttendees.length; i++) {
+      const attendee = processedAttendees[i];
+      // 1. حجم الـ QR Code مناسب جداً للمربع
+      const qrCodeBuffer = await QRCode.toBuffer(attendee.ticketCode, {
+        errorCorrectionLevel: 'H',
+        margin: 1,
+        width: 200, 
+        color: {
+          dark: '#000000',
+          light: '#ffffff'
+        }
+      });
+
+      // 2. إحداثيات جديدة لسحب الـ QR إلى الأعلى وإلى اليسار ليدخل المربع تماماً
+      const finalTicketBuffer = await sharp(templatePath)
+        .resize(1500, 500) 
+        .composite([
+          { 
+            input: qrCodeBuffer, 
+            top: 92,     // رفعه للأعلى (تقليل المسافة من الحافة العلوية)
+            left: 1182   // سحبه لليسار (تقليل المسافة من الحافة اليسرى ليدخل السنتر)
+          }
+        ])
+        .png()
+        .toBuffer();
+
+
+
+      ticketAttachments.push({
+        filename: `Ticket-${attendee.name.replace(/\s+/g, '-')}.png`,
+        content: finalTicketBuffer,
+        contentType: 'image/png'
+      });
+    }
+
+    const bookingData = {
+      bookingId: newRegistration._id.toString(),
+      buyerName: fullName,
+      ticketType,
+      numberOfTickets,
+      totalAmount
+    };
+
+    await sendTicketsEmail(email, bookingData, ticketAttachments);
+
+    return res.status(201).json({
+      success: true,
+      message: 'success registration!',
+      registrationId: newRegistration._id
+    });
 
   } catch (error) {
-    console.error("failed to save in mongo", error.message);
-    res.status(500).json({ success: false, message: 'Server Error', error: error.message });
+    console.error('Error in registration route logic:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Something went wrong!', 
+      error: error.message 
+    });
   }
 });
+
+router.get('/registrations/export', ticketsAuthMiddleware, async (req, res) => {
+  try {
+    const status = req.query.status || '';
+    const query = {};
+    if (status) {
+      if (status === 'Accepted') {
+        query.status = { $in: ['Accepted', 'Completed'] };
+      } else if (status === 'Rejected') {
+        query.status = { $in: ['Rejected', 'Failed'] };
+      } else {
+        query.status = status;
+      }
+    }
+
+    const registrations = await Registration.find(query).sort({ createdAt: -1 });
+    const mappedRegistrations = registrations.map((reg, idx) => {
+      const doc = reg.toObject();
+      if (doc.status === 'Completed') {
+        doc.status = 'Accepted';
+      } else if (doc.status === 'Failed') {
+        doc.status = 'Rejected';
+      }
+      if (!doc.customerNumber) {
+        doc.customerNumber = 1000 + (registrations.length - idx);
+      }
+      return doc;
+    });
+
+    res.json({
+      success: true,
+      data: mappedRegistrations
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.patch('/registrations/:id', ticketsAuthMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!['Accepted', 'Rejected', 'Pending'].includes(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+
+    const registration = await Registration.findById(id);
+    if (!registration) {
+      return res.status(404).json({ error: 'Registration not found' });
+    }
+
+    registration.status = status;
+    await registration.save();
+
+    res.json({
+      success: true,
+      registration
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.patch('/tickets/add', ticketsAuthMiddleware, async (req, res) => {
+  try {
+    const { numberOfTickets } = req.body;
+    const increment = parseInt(numberOfTickets) || 1;
+
+    let ticket = await Ticket.findOne({ ticketType: 'main' });
+    if (!ticket) {
+      ticket = await Ticket.findOne();
+    }
+
+    if (ticket) {
+      ticket.maxCapacity += increment;
+      await ticket.save();
+    } else {
+      await Ticket.create({
+        ticketType: 'main',
+        price: 10.5,
+        maxCapacity: increment,
+        soldCount: 0
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Tickets added successfully'
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

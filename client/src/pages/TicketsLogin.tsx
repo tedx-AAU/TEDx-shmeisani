@@ -142,7 +142,7 @@ const TicketsLogin: React.FC = () => {
                     fontSize: { xs: '0.9rem', sm: '1rem' },
                   }}
                 >
-                  Access the TEDxAmman Arab University tickets management system
+                  Access the TEDx Shmeisani tickets management system
                 </Typography>
               </Box>
 
