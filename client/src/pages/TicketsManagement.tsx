@@ -367,7 +367,7 @@ const TicketsManagement: React.FC = () => {
     ) {
       fetchRegistrations(page, search, filter);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, [page]);
 
   if (!isTicketsAuthenticated || userType !== 'ticketsAdmin') {

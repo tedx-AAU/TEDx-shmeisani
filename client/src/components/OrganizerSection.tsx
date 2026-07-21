@@ -3,7 +3,8 @@ import { ORGANIZER } from '../constants';
 
 const OrganizerSection: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+     style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
         <div className="lg:col-span-5">
           <div className="relative group">
@@ -16,7 +17,7 @@ const OrganizerSection: React.FC = () => {
           </div>
         </div>
         <div className="lg:col-span-7 space-y-8">
-          <h2 className="text-red-600 font-oswald text-lg font-bold tracking-widest uppercase">
+          <h2 className="text-red-600 text-lg font-bold tracking-widest uppercase">
             أهلاً فيكم برحلة “سَمْت”.
           </h2>
          

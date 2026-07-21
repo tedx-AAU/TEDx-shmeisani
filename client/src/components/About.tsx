@@ -3,10 +3,11 @@ import licenceImg from '../assets/images/licence.jpg';
 
 const About: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 "
+   style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         <div className="order-2 lg:order-1">
-          <h2 className="text-5xl font-oswald font-bold mb-10 text-red-600">
+          <h2 className="text-5xl font-bold mb-10 text-red-600">
           ؟TEDx <span className="text-white"> شو يعني </span>
           </h2>
           <div className="space-y-8 text-gray-400 leading-relaxed text-xl font-light">

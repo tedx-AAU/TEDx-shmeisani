@@ -125,8 +125,6 @@ router.post('/', async (req, res) => {
     } = req.body;
 
     const ticketInventory = await Ticket.findOne({ ticketType });
-    // ملحوظة: إذا كان جدول الـ Ticket يُستخدم كـ Inventory فقط، سنبحث عن نوع التذكرة، 
-    // ولكن لوحة التحكم قد تكون بحاجة لإنشاء تذاكر فرعية للمستخدمين فيه، سنعالج ذلك بالأسفل.
 
     let processedAttendees = [];
     if (attendees && attendees.length > 0) {
@@ -186,17 +184,15 @@ router.post('/', async (req, res) => {
 
     await newRegistration.save();
 
-    // 2. تحديث المخزون إذا كان موجوداً
+  
     if (ticketInventory) {
       ticketInventory.soldCount += numberOfTickets;
       await ticketInventory.save();
     }
 
-    // ⭐ إصلاح لوحة التحكم: إنشاء مستند تذكرة لكل حاضر داخل جدول الـ Ticket (إذا كانت اللوحة تقرأ منه)
-    // إذا كانت اللوحة تتوقع سطر منفصل لكل شخص للحضور والـ Check-in:
     for (const attendee of processedAttendees) {
       try {
-        // نقوم بإنشاء سجل التذكرة للحاضر لكي تظهر في الـ Management
+        
         await Ticket.create({
           ticketCode: attendee.ticketCode,
           holderName: attendee.fullName,
@@ -207,7 +203,7 @@ router.post('/', async (req, res) => {
           isCheckedIn: false,
           registrationId: newRegistration._id
         }).catch(() => {
-          // تفادي أي خطأ إذا كانت الـ Schema للـ Ticket مختلفة، لكي لا يتوقف السيرفر
+          
           console.log("Ticket creation skipped or model structure differs.");
         });
       } catch (e) {
@@ -219,10 +215,9 @@ router.post('/', async (req, res) => {
     const templateName = ticketType === 'full' ? 'fullpath.jpeg' : 'pre.jpeg';
     const templatePath = path.join(__dirname, `../assets/images/${templateName}`);
 
-    // 3. توليد الصور والـ QR بدقة ومكان ثابتين
+  
     for (let i = 0; i < processedAttendees.length; i++) {
       const attendee = processedAttendees[i];
-      // 1. حجم الـ QR Code مناسب جداً للمربع
       const qrCodeBuffer = await QRCode.toBuffer(attendee.ticketCode, {
         errorCorrectionLevel: 'H',
         margin: 1,
@@ -233,14 +228,13 @@ router.post('/', async (req, res) => {
         }
       });
 
-      // 2. إحداثيات جديدة لسحب الـ QR إلى الأعلى وإلى اليسار ليدخل المربع تماماً
       const finalTicketBuffer = await sharp(templatePath)
         .resize(1500, 500) 
         .composite([
           { 
             input: qrCodeBuffer, 
-            top: 92,     // رفعه للأعلى (تقليل المسافة من الحافة العلوية)
-            left: 1182   // سحبه لليسار (تقليل المسافة من الحافة اليسرى ليدخل السنتر)
+            top: 92,     
+            left: 1183   
           }
         ])
         .png()

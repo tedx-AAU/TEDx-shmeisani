@@ -3,11 +3,12 @@ import { TEAM_MEMBERS } from '../constants';
 
 const TeamPage: React.FC = () => {
   return (
-    <div className="bg-black text-white min-h-screen pt-20 pb-32">
+    <div className="bg-black text-white min-h-screen pt-20 pb-32"
+    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="text-center mb-24">
          
-          <h1 className="text-6xl md:text-8xl font-oswald font-extrabold tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight">
              بنّائين <span className="text-red-600"> السمت</span>
           </h1>
         </header>
@@ -32,7 +33,7 @@ const TeamPage: React.FC = () => {
 
               {/* Info & Buttons Overlay */}
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 p-8 text-center">
-                <h3 className="text-2xl font-oswald font-bold mb-1">
+                <h3 className="text-2xl  font-bold mb-1">
                   {member.name}
                 </h3>
                 <p className="text-red-500 font-bold uppercase tracking-widest text-xs mb-6">

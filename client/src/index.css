@@ -1,3 +1,7 @@
+@font-face {
+  font-family: 'childos arabic';
+  src: url('../src/assets/fonts/childos-arabic.otf') format('opentype');
+}
 body {
   margin: 0;
   font-family:

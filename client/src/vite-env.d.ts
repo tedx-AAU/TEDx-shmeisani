@@ -1,4 +1,4 @@
-/// <reference types="vite/client" />
+// <reference types="vite/client" />
 
 interface ImportMetaEnv {
   readonly VITE_API_URL?: string;
@@ -19,11 +19,6 @@ declare module '*.png' {
   const src: string;
   export default src;
 }
-{/*declare module '*.PNG' {
-  const src: string;
-  export default src;
-}
- */}
 
 declare module '*.gif' {
   const src: string;

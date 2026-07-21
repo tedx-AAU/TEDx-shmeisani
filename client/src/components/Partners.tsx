@@ -11,7 +11,8 @@ const PartnersSection: React.FC = () => {
   const communityPartners = PARTNERS.filter((p) => p.tier === 'Community');
 
   return (
-    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden"
+    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-20">
         <div className="absolute top-[10%] left-[10%] w-64 h-64 bg-red-600/20 rounded-full blur-[100px]"></div>
@@ -20,12 +21,13 @@ const PartnersSection: React.FC = () => {
 
       {/* Section Header */}
       <div className="relative text-center mb-24 z-10">
-        <h2 className="text-red-600 font-oswald text-xl font-bold tracking-[0.2em] uppercase mb-4">
+        <h2 className="text-red-600 text-xl font-bold tracking-[0.2em] uppercase mb-4">
+          <br/>
           <br/>
           <br/>
           Our Support Network
         </h2>
-        <h3 className="text-5xl md:text-7xl font-oswald font-bold text-white uppercase tracking-tight">
+        <h3 className="text-5xl md:text-7xl font-bold text-white uppercase tracking-tight">
           The{' '}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-800">
             Sponsors
@@ -40,7 +42,7 @@ const PartnersSection: React.FC = () => {
           <div className="relative">
             <div className="flex items-center gap-4 mb-16">
               <div className="h-px bg-gradient-to-r from-transparent via-red-600/50 to-transparent flex-1"></div>
-              <h4 className="text-3xl font-oswald text-white uppercase tracking-[0.15em] font-light">
+              <h4 className="text-3xl text-white uppercase tracking-[0.15em] font-light">
                  <span className="font-bold text-red-500"></span>
               </h4>
               <div className="h-px bg-gradient-to-r from-transparent via-red-600/50 to-transparent flex-1"></div>
@@ -64,7 +66,8 @@ const PartnersSection: React.FC = () => {
           <div className="relative">
             <div className="flex items-center gap-4 mb-12">
               <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1"></div>
-              <h4 className="text-2xl font-oswald text-white/90 uppercase tracking-[0.15em] font-light">
+              <h4 className="text-2xl 
+              text-white/90 uppercase tracking-[0.15em] font-light">
                 <span className="font-bold text-yellow-500/80"></span>
               </h4>
               <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1"></div>
@@ -88,7 +91,7 @@ const PartnersSection: React.FC = () => {
           <div className="relative">
             <div className="flex items-center gap-4 mb-10">
               <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1"></div>
-              <h4 className="text-xl font-oswald text-white/70 uppercase tracking-[0.15em] font-light">
+              <h4 className="text-xl text-white/70 uppercase tracking-[0.15em] font-light">
                  <span className="font-bold text-gray-400"></span>
               </h4>
               <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent flex-1"></div>
@@ -112,7 +115,7 @@ const PartnersSection: React.FC = () => {
           <div className="relative">
             <div className="flex items-center gap-4 mb-10">
               <div className="h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent flex-1"></div>
-              <h4 className="text-xl font-oswald text-white/80 uppercase tracking-[0.15em] font-light">
+              <h4 className="text-xl text-white/80 uppercase tracking-[0.15em] font-light">
                 <span className="font-bold text-blue-400"></span>
               </h4>
               <div className="h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent flex-1"></div>
@@ -136,7 +139,7 @@ const PartnersSection: React.FC = () => {
           <div className="relative">
             <div className="flex items-center gap-4 mb-10">
               <div className="h-px bg-gradient-to-r from-transparent via-purple-500/30 to-transparent flex-1"></div>
-              <h4 className="text-xl font-oswald text-white/80 uppercase tracking-[0.15em] font-light">
+              <h4 className="text-xl text-white/80 uppercase tracking-[0.15em] font-light">
                 
                 <span className="font-bold text-purple-400"></span>
               </h4>
@@ -161,7 +164,7 @@ const PartnersSection: React.FC = () => {
           <div className="relative">
             <div className="flex items-center gap-4 mb-10">
               <div className="h-px bg-gradient-to-r from-transparent via-white/5 to-transparent flex-1"></div>
-              <h4 className="text-xl font-oswald text-white/60 uppercase tracking-[0.15em] font-light">
+              <h4 className="text-xl  text-white/60 uppercase tracking-[0.15em] font-light">
               
                 <span className="font-bold text-white/40"></span>
               </h4>

@@ -3,14 +3,15 @@ import { SPEAKERS } from '../constants';
 
 const SpeakersPage: React.FC = () => {
   return (
-    <div className="bg-black text-white min-h-screen pb-24 pt-20">
+    <div className="bg-black text-white min-h-screen pb-24 pt-20"
+    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="text-center mb-32">
-          <h2 className="text-red-600 font-oswald text-xl font-bold tracking-[0.5em] uppercase mb-4">
+          <h2 className="text-red-600  text-xl font-bold tracking-[0.5em] uppercase mb-4">
             The Voices
           </h2>
-          <h1 className="text-6xl md:text-8xl font-oswald font-extrabold tracking-tight">
-            SPEAKER <span className="text-red-600">GALLERY</span>
+          <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight">
+            SPEAKERS <span className="text-red-600">GALLERY</span>
           </h1>
           <p className="mt-8 text-gray-400 max-w-2xl mx-auto text-xl font-light">
             Ten visionaries crossing the boundaries of their fields to bring you
@@ -50,10 +51,10 @@ const SpeakersPage: React.FC = () => {
                   <div className="inline-block px-4 py-1 border border-red-600/30 text-red-500 text-xs font-bold rounded-full uppercase tracking-tighter">
                     Speaker 0{index + 1}
                   </div>
-                  <h3 className="text-4xl md:text-6xl font-oswald font-bold leading-tight">
+                  <h3 className="text-4xl md:text-6xl  font-bold leading-tight">
                     {speaker.name}
                   </h3>
-                  <p className="text-red-600 text-xl md:text-2xl font-semibold tracking-tight uppercase">
+                  <p className="text-red-600 text-xl md:text-2xl tracking-tight uppercase">
                     {speaker.title}
                   </p>
                   <div

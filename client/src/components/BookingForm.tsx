@@ -144,11 +144,11 @@ const onSubmit = async (data: FormData) => {
         isStudent: data.isStudent,
         university: data.university || '',
       },
-      // هنا نقوم بملء بيانات الأشخاص الإضافيين، ونعطيهم إيميل وهاتف الشخص الأول تلقائياً
+      
       ...(data.attendees || []).map((att: any) => ({
         name: att.fullName || att.name,
-        email: data.email,        // استخدام إيميل الشخص الأول المسجِّل
-        phone: data.phoneNumber,  // استخدام هاتف الشخص الأول المسجِّل
+        email: data.email,        
+        phone: data.phoneNumber,  
         gender: att.gender,
         age: att.age,
         isStudent: att.isStudent,

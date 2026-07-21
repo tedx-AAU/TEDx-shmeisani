@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SCHEDULE_TEDX, SCHEDULE_PRE_TEDX } from '../constants'; // تأكد من تصدير المصفوفتين من ملف constants
+import { SCHEDULE_TEDX, SCHEDULE_PRE_TEDX } from '../constants'; 
 
 const SchedulePage: React.FC = () => {
  
@@ -8,10 +8,11 @@ const SchedulePage: React.FC = () => {
   const currentSchedule = activeTab === 'tedx' ? SCHEDULE_TEDX : SCHEDULE_PRE_TEDX;
 
   return (
-    <div className="bg-black text-white min-h-screen pt-20 pb-32 overflow-x-hidden">
+    <div className="bg-black text-white min-h-screen pt-20 pb-32 overflow-x-hidden"
+    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
-        <h2 className="text-white font-oswald text-xl font-bold tracking-[0.5em] uppercase mb-4">جدولنا</h2>
-        <h1 className="text-6xl md:text-8xl font-oswald font-extrabold tracking-tight text-red-600">
+        <h2 className="text-white text-xl font-bold tracking-[0.5em] uppercase mb-4">جدولنا</h2>
+        <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight text-red-600">
           TEDx <span className="text-white">Time Line</span>
         </h1>
       </div>
@@ -20,7 +21,7 @@ const SchedulePage: React.FC = () => {
      <div className="flex justify-center items-center gap-6 my-10 bg-transparent">
   <button
     onClick={() => setActiveTab('tedx')}
-    className={`px-8 py-3 font-oswald font-bold uppercase transition-all border-2 rounded-full min-w-[160px] shadow-lg ${
+    className={`px-8 py-3 font-bold uppercase transition-all border-2 rounded-full min-w-[160px] shadow-lg ${
       activeTab === 'tedx' 
         ? 'bg-red-600 border-red-600 text-white shadow-[0_4px_15px_rgba(230,43,30,0.4)]' 
         : 'bg-white/5 border-white/10 text-white hover:border-white/40 hover:bg-white/10'
@@ -32,7 +33,7 @@ const SchedulePage: React.FC = () => {
   
   <button
     onClick={() => setActiveTab('pre')}
-    className={`px-8 py-3 font-oswald font-bold uppercase transition-all border-2 rounded-full min-w-[160px] shadow-lg ${
+    className={`px-8 py-3  font-bold uppercase transition-all border-2 rounded-full min-w-[160px] shadow-lg ${
       activeTab === 'pre' 
         ? 'bg-red-600 border-red-600 text-white shadow-[0_4px_15px_rgba(230,43,30,0.4)]' 
         : 'bg-white/5 border-white/10 text-white hover:border-white/40 hover:bg-white/10'
@@ -59,12 +60,12 @@ const SchedulePage: React.FC = () => {
               <div key={index} className="relative w-full h-[280px] flex items-center justify-center z-10">
                 <div 
                   className={`absolute w-[180px] h-[180px] md:w-[220px] md:h-[220px] bg-red-600 rounded-full flex flex-col items-center justify-center text-center p-6 shadow-[0_0_40px_rgba(235,0,40,0.4)] border-2 border-white/10 transition-all duration-500 hover:scale-110 hover:shadow-[0_0_60px_rgba(235,0,40,0.8)] hover:border-white animate-bubble cursor-default group ${bubblePosition}`}
-                  style={{ animationDelay: `${index * 0.2}s` }} // قللت التأخير قليلاً لسرعة العرض
+                  style={{ animationDelay: `${index * 0.2}s` }} 
                 >
                   <span className="text-[10px] font-bold text-white/60 tracking-[0.3em] uppercase mb-2">
                     {item.time}
                   </span>
-                  <h3 className="text-base md:text-xl font-oswald font-bold leading-tight uppercase group-hover:scale-105 transition-transform">
+                  <h3 className="text-base md:text-xl font-bold leading-tight uppercase group-hover:scale-105 transition-transform">
                     {item.title}
                   </h3>
                   <p className="text-[10px] md:text-xs mt-3 leading-relaxed text-white/80 font-medium px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

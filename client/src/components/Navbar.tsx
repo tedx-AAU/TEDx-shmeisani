@@ -37,14 +37,14 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/95 backdrop-blur-md border-b border-white/10 py-2' : 'bg-transparent py-4'}`}
-    >
+    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
           <div
             className="flex-shrink-0 flex items-center cursor-pointer"
             onClick={() => onNavigate('home')}
           >
-            <span className="font-oswald text-2xl font-bold">
+            <span className=" text-2xl font-bold">
               <span className="text-red-600">TEDx</span>
               <span className="text-white">Shmeisani</span>
             </span>
@@ -65,15 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 {link.name}
               </button>
             ))}
-            
-             {/* Ticket booking – commented out */}
-             {/* <button 
-              onClick={() => onNavigate('tickets')}
-              className={`bg-red-600 text-white px-6 py-2 rounded-full font-bold text-xs hover:bg-red-700 transition-all shadow-[0_0_15px_rgba(235,0,40,0.3)] ${currentView === 'tickets' ? 'ring-2 ring-white' : ''}`}
-            >
-              التذاكر
-            </button>  */}
-            
+          
           </div>
 
           <div className="md:hidden flex items-center">
@@ -123,19 +115,13 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 {link.name}
               </button>
             ))}
-             {/* Ticket booking – commented out */}
-            {/*   <button 
-              onClick={() => { onNavigate('tickets'); setIsMobileMenuOpen(false); }}
-              className="block w-full text-left px-3 py-4 text-sm font-bold tracking-widest text-red-600 uppercase"
-            >
-              التذاكر
-            </button> */}
-           
+          
           </div>
         </div>
       )}
     </nav>
   );
 };
+
 
 export default Navbar;

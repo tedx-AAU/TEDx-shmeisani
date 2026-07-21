@@ -9,7 +9,8 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-black">
+    <div className="bg-black"
+     style={{ fontFamily: "'Childos Arabic', sans-serif" }} >
         <Hero 
         onSeeSpeakers={() => navigate('/speakers')} 
         onGetTickets={() => navigate('/tickets')} 

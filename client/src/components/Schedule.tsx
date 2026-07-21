@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { SCHEDULE } from '../constants';
+import { SCHEDULE_TEDX as SCHEDULE } from '../constants';
 
 interface ScheduleProps {
   onSeeFull?: () => void;

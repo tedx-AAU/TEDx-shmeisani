@@ -2,10 +2,11 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-black border-t border-white/5 pt-24 pb-12">
+    <footer className="bg-black border-t border-white/5 pt-24 pb-12"
+    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-20">
-          <span className="font-oswald text-4xl font-bold mb-8 block">
+          <span className=" text-4xl font-bold mb-8 block">
             <span className="text-red-600">TEDx</span>Shmeisani
           </span>
           <p className="text-gray-400 max-w-sm mb-10 leading-relaxed text-lg font-light">

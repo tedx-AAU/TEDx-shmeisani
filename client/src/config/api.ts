@@ -1,4 +1,3 @@
-// API Configuration (Vite only injects VITE_* / configured prefixes — not CRA's REACT_APP_* unless envPrefix includes it)
 const API_URL =
   import.meta.env.VITE_API_URL ||
   import.meta.env.REACT_APP_API_URL ||
