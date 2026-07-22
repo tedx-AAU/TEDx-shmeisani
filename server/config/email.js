@@ -19,7 +19,7 @@ const createTransporter = () => {
 const emailTemplates = {
  
   ticketDelivery: (bookingData) => ({
-    subject: `🎉 Your Tickets for TEDx Shmeisani are HERE! - [Booking #${bookingData.bookingId.substring(0, 8)}]`,
+    subject: `🎉 Your TEDx Shmeisani Tickets Are Confirmed! `,
     html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -48,10 +48,11 @@ const emailTemplates = {
           </div>
           <div class="content">
             <div class="headline">Hi ${bookingData.buyerName},</div>
-            <p>Thank you for booking your tickets for <strong>TEDx Shmeisani</strong>! Your transaction is complete, and your tickets have been generated successfully.</p>
+            <p>Thank you for joining us at <strong>TEDx Shmeisani</strong>. Your registration has been successfully received and confirmed!</p>
+            <p>Here are your booking details:</p>
             
             <div class="details-box">
-              <div class="details-row"><span class="label">Ticket Type:</span> <span class="value">${bookingData.ticketType === 'full' ? 'Full Pathway (Pre-TEDx + Main)' : 'Main Event'}</span></div>
+              <div class="details-row"><span class="label">Ticket Type:</span> <span class="value">${bookingData.ticketType === 'full' ? 'Full Pathway (Pre-TEDx + Main TEDx)' : 'Main Event'}</span></div>
               <div class="details-row"><span class="label">Number of Tickets:</span> <span class="value">${bookingData.numberOfTickets}</span></div>
               <div class="details-row"><span class="label">Total Paid:</span> <span class="value">${bookingData.totalAmount} JD</span></div>
             </div>
@@ -60,7 +61,7 @@ const emailTemplates = {
               🚨 Important: We have attached your digital tickets to this email. Please download them and make sure to show the QR/Barcode on each ticket at the entrance gate.
             </p>
 
-            <p>We look forward to seeing you at the event!</p>
+            <p>We can't wait to see you soon and share an inspiring experience together!</p>
             <p>Best regards,<br><strong>The TEDx Shmeisani Team</strong></p>
           </div>
           <div class="footer">
@@ -74,8 +75,8 @@ const emailTemplates = {
     text: `
 Hi ${bookingData.buyerName},
 
-Thank you for booking your tickets for TEDx Shmeisani!
-Your transaction is complete, and your tickets have been generated successfully.
+Thank you for joining us at TEDx Shmeisani.
+Your registration has been successfully received and confirmed!
 
 Booking Details:
 - Ticket Type: ${bookingData.ticketType === 'full' ? 'Full Pathway' : 'Main Event'}

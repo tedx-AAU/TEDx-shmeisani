@@ -13,10 +13,6 @@ const SpeakersPage: React.FC = () => {
           <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight">
             SPEAKERS <span className="text-red-600">GALLERY</span>
           </h1>
-          <p className="mt-8 text-gray-400 max-w-2xl mx-auto text-xl font-light">
-            Ten visionaries crossing the boundaries of their fields to bring you
-            ideas worth spreading.
-          </p>
         </header>
 
         <div className="space-y-40">

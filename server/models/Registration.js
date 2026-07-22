@@ -22,6 +22,10 @@ const AttendeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  gender: { type: String },
+  age: { type: Number },
+  isStudent: { type: String },
+  university: { type: String },
   isCheckedIn: {
     type: Boolean,
     default: false,

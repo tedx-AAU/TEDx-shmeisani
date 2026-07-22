@@ -40,6 +40,17 @@ import { apiConfig } from '../config/api';
 import { useAuth } from '../contexts/AuthContext';
 import { apiRequest } from '../services/api';
 
+interface Attendee {
+  name?: string;
+  fullName?: string;
+  email: string;
+  phone: string;
+  gender?: string;
+  age?: number | string;
+  isStudent?: string;
+  university?: string;
+}
+
 interface Registration {
   _id: string;
   customerNumber: string;
@@ -54,6 +65,8 @@ interface Registration {
   heard: string;
   about: string;
   numberOfTickets: number;
+  ticketType?: string;
+  attendees?: Attendee[];
   status: 'Pending' | 'Accepted' | 'Rejected';
   createdAt?: string;
   updatedAt?: string;
@@ -81,7 +94,8 @@ const TicketsManagement: React.FC = () => {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('');
   const [totalAccepted, setTotalAccepted] = useState(0);
-  const [availableTickets, setAvailableTickets] = useState(0);
+  const [mainStats, setMainStats] = useState({ capacity: 0, sold: 0, remaining: 0 });
+  const [fullStats, setFullStats] = useState({ capacity: 0, sold: 0, remaining: 0 });
 
   const fetchAvailableTickets = useCallback(async () => {
     try {
@@ -91,7 +105,8 @@ const TicketsManagement: React.FC = () => {
       );
 
       if (response?.success) {
-        setAvailableTickets(response?.numberOfTickets || 0);
+        setMainStats(response.mainStats || { capacity: 0, sold: 0, remaining: 0 });
+        setFullStats(response.fullStats || { capacity: 0, sold: 0, remaining: 0 });
       }
     } catch (error) {
       console.error('Error fetching available tickets:', error);
@@ -311,6 +326,8 @@ const TicketsManagement: React.FC = () => {
   };
 
   const handleRowClick = (registration: Registration) => {
+    console.log('Selected Registration:', registration);
+    console.log('Attendees:', registration.attendees);
     setSelectedRegistration(registration);
     setDialogOpen(true);
   };
@@ -462,7 +479,7 @@ const TicketsManagement: React.FC = () => {
 
           {/* Stats Cards */}
           <Grid container spacing={3} sx={{ mb: 3 }}>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <Fade in timeout={700}>
                 <Card
                   elevation={0}
@@ -489,17 +506,20 @@ const TicketsManagement: React.FC = () => {
                         letterSpacing: '0.5px',
                       }}
                     >
-                      Available Tickets
+                      Main TEDx Tickets
                     </Typography>
                     <Typography
                       variant="h4"
                       sx={{
                         fontWeight: 700,
                         color: '#E62B1F',
-                        mb: 2,
+                        mb: 1,
                       }}
                     >
-                      {availableTickets}
+                      {mainStats.remaining} <Typography component="span" sx={{ fontSize: '1rem', color: '#666' }}>remaining</Typography>
+                    </Typography>
+                    <Typography sx={{ color: '#666', fontSize: '0.85rem', mb: 2 }}>
+                      Total Capacity: {mainStats.capacity} | Sold: {mainStats.sold}
                     </Typography>
                     <Button
                       size="small"
@@ -516,13 +536,59 @@ const TicketsManagement: React.FC = () => {
                         },
                       }}
                     >
-                      Add One Ticket
+                      Add Ticket
                     </Button>
                   </CardContent>
                 </Card>
               </Fade>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+              <Fade in timeout={750}>
+                <Card
+                  elevation={0}
+                  sx={{
+                    height: '100%',
+                    background: 'rgba(255, 255, 255, 0.98)',
+                    borderRadius: 3,
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+                    border: '1px solid rgba(230, 43, 31, 0.1)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      boxShadow: '0 8px 30px rgba(230, 43, 31, 0.2)',
+                    },
+                  }}
+                >
+                  <CardContent>
+                    <Typography
+                      sx={{
+                        color: 'rgba(0, 0, 0, 0.6)',
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        mb: 1,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                      }}
+                    >
+                      Full Path Tickets
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: 700,
+                        color: '#E62B1F',
+                        mb: 1,
+                      }}
+                    >
+                      {fullStats.remaining} <Typography component="span" sx={{ fontSize: '1rem', color: '#666' }}>remaining</Typography>
+                    </Typography>
+                    <Typography sx={{ color: '#666', fontSize: '0.85rem', mb: 2 }}>
+                      Total Capacity: {fullStats.capacity} | Sold: {fullStats.sold}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Fade>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <Fade in timeout={800}>
                 <Card
                   elevation={0}
@@ -825,6 +891,7 @@ const TicketsManagement: React.FC = () => {
                           <TableCell>Full Name</TableCell>
                           <TableCell>Email</TableCell>
                           <TableCell>Phone Number</TableCell>
+                          <TableCell>Ticket Type</TableCell>
                           <TableCell>Number Of Tickets</TableCell>
                           <TableCell>Status</TableCell>
                           <TableCell>Actions</TableCell>
@@ -860,6 +927,9 @@ const TicketsManagement: React.FC = () => {
                               <TableCell>{registration?.fullName}</TableCell>
                               <TableCell>{registration?.email}</TableCell>
                               <TableCell>{registration?.phoneNumber}</TableCell>
+                              <TableCell>
+                                {registration?.ticketType === 'full' ? 'Full Path' : 'Main TEDx'}
+                              </TableCell>
                               <TableCell
                                 sx={{
                                   fontWeight: 600,
@@ -1047,66 +1117,88 @@ const TicketsManagement: React.FC = () => {
                   sx={{
                     fontWeight: 600,
                     color: '#E62B1F',
-                    mb: 0.5,
-                    fontSize: '0.85rem',
+                    mb: 2,
+                    fontSize: '1rem',
                     textTransform: 'uppercase',
                     letterSpacing: '0.5px',
                   }}
                 >
-                  Full Name
+                  Attendees Details
                 </Typography>
-                <Typography sx={{ color: '#1a1a1a' }}>
-                  {selectedRegistration?.fullName}
-                </Typography>
+                
+                {selectedRegistration?.attendees && selectedRegistration.attendees.length > 0 ? (
+                  <Stack spacing={2}>
+                    {selectedRegistration.attendees.map((attendee, index) => (
+                      <Box key={index} sx={{ p: 2, backgroundColor: 'rgba(0, 0, 0, 0.03)', borderRadius: 2, border: '1px solid rgba(0, 0, 0, 0.05)' }}>
+                        <Typography sx={{ fontWeight: 700, color: '#E62B1F', mb: 1 }}>
+                          Person {index + 1}
+                        </Typography>
+                        <Grid container spacing={1}>
+                          <Grid size={{ xs: 12, sm: 6 }}>
+                            <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}>
+                              <strong>Name:</strong> {attendee.name || attendee.fullName || (index === 0 ? selectedRegistration.fullName : 'N/A')}
+                            </Typography>
+                          </Grid>
+                          
+                          {index === 0 && (
+                            <>
+                              <Grid size={{ xs: 12, sm: 6 }}>
+                                <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}>
+                                  <strong>Email:</strong> {selectedRegistration.email}
+                                </Typography>
+                              </Grid>
+                              <Grid size={{ xs: 12, sm: 6 }}>
+                                <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}>
+                                  <strong>Phone:</strong> {selectedRegistration.phoneNumber}
+                                </Typography>
+                              </Grid>
+                            </>
+                          )}
+                          
+                          <Grid size={{ xs: 12, sm: index === 0 ? 6 : 12 }}>
+                            <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}>
+                              <strong>Gender & Age:</strong> {attendee.gender || (index === 0 ? selectedRegistration.gender : 'N/A')}, {attendee.age || (index === 0 ? selectedRegistration.age : 'N/A')} years
+                            </Typography>
+                          </Grid>
+                          
+                          <Grid size={{ xs: 12, sm: 12 }}>
+                            <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}>
+                              <strong>Student Status:</strong> {attendee.isStudent || (index === 0 ? selectedRegistration.isStudent : 'N/A')}
+                              {attendee.university && attendee.university !== '-' 
+                                ? ` - ${attendee.university}` 
+                                : (index === 0 && selectedRegistration.university && selectedRegistration.university !== '-' ? ` - ${selectedRegistration.university}` : '')}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Box sx={{ p: 2, backgroundColor: 'rgba(0, 0, 0, 0.03)', borderRadius: 2 }}>
+                    <Grid container spacing={1}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}><strong>Name:</strong> {selectedRegistration?.fullName}</Typography>
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}><strong>Email:</strong> {selectedRegistration?.email}</Typography>
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}><strong>Phone:</strong> {selectedRegistration?.phoneNumber}</Typography>
+                      </Grid>
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}><strong>Gender & Age:</strong> {selectedRegistration?.gender}, {selectedRegistration?.age} years</Typography>
+                      </Grid>
+                      <Grid size={{ xs: 12 }}>
+                        <Typography sx={{ color: '#1a1a1a', fontSize: '0.9rem' }}>
+                          <strong>Student Status:</strong> {selectedRegistration?.isStudent} 
+                          {selectedRegistration?.university && selectedRegistration.university !== '-' ? ` - ${selectedRegistration.university}` : ''}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                )}
               </Box>
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid rgba(230, 43, 31, 0.1)',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 600,
-                    color: '#E62B1F',
-                    mb: 0.5,
-                    fontSize: '0.85rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                  }}
-                >
-                  Email
-                </Typography>
-                <Typography sx={{ color: '#1a1a1a' }}>
-                  {selectedRegistration?.email}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid rgba(230, 43, 31, 0.1)',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 600,
-                    color: '#E62B1F',
-                    mb: 0.5,
-                    fontSize: '0.85rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                  }}
-                >
-                  Phone Number
-                </Typography>
-                <Typography sx={{ color: '#1a1a1a' }}>
-                  {selectedRegistration?.phoneNumber}
-                </Typography>
-              </Box>
+
               <Box
                 sx={{
                   p: 2,
@@ -1129,57 +1221,6 @@ const TicketsManagement: React.FC = () => {
                 </Typography>
                 <Typography sx={{ color: '#1a1a1a' }}>
                   {selectedRegistration?.address}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid rgba(230, 43, 31, 0.1)',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 600,
-                    color: '#E62B1F',
-                    mb: 0.5,
-                    fontSize: '0.85rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                  }}
-                >
-                  Student Status
-                </Typography>
-                <Typography sx={{ color: '#1a1a1a' }}>
-                  {selectedRegistration?.isStudent}
-                  {selectedRegistration?.university &&
-                    ` - ${selectedRegistration?.university}`}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                  border: '1px solid rgba(230, 43, 31, 0.1)',
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontWeight: 600,
-                    color: '#E62B1F',
-                    mb: 0.5,
-                    fontSize: '0.85rem',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px',
-                  }}
-                >
-                  Gender & Age
-                </Typography>
-                <Typography sx={{ color: '#1a1a1a' }}>
-                  {selectedRegistration?.gender}, {selectedRegistration?.age}{' '}
-                  years
                 </Typography>
               </Box>
               <Box

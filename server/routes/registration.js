@@ -12,17 +12,28 @@ const ticketsAuthMiddleware = require('../middleware/ticketsAuth');
 router.get('/tickets/available', async (req, res) => {
   try {
     const tickets = await Ticket.find();
-  
-    let totalMax = 0;
-    let totalSold = 0;
+    const mainStats = { capacity: 0, sold: 0, remaining: 0 };
+    const fullStats = { capacity: 0, sold: 0, remaining: 0 };
+
     tickets.forEach(t => {
-      totalMax += t.maxCapacity || 0;
-      totalSold += t.soldCount || 0;
+      const remaining = (t.maxCapacity || 0) - (t.soldCount || 0);
+      if (t.ticketType === 'main') {
+        mainStats.capacity += t.maxCapacity || 0;
+        mainStats.sold += t.soldCount || 0;
+        mainStats.remaining += remaining;
+      } else if (t.ticketType === 'full') {
+        fullStats.capacity += t.maxCapacity || 0;
+        fullStats.sold += t.soldCount || 0;
+        fullStats.remaining += remaining;
+      }
     });
+
     res.json({ 
       success: true,
-      numberOfTickets: totalMax - totalSold,
-      available: totalMax - totalSold, 
+      mainStats,
+      fullStats,
+      numberOfTickets: mainStats.remaining + fullStats.remaining,
+      available: mainStats.remaining + fullStats.remaining, 
       tickets 
     });
   } catch (error) {
@@ -179,89 +190,14 @@ router.post('/', async (req, res) => {
       numberOfTickets,
       attendees: processedAttendees,
       totalAmount,
-      status: 'Completed' 
+      status: 'Pending' 
     });
 
     await newRegistration.save();
 
-  
-    if (ticketInventory) {
-      ticketInventory.soldCount += numberOfTickets;
-      await ticketInventory.save();
-    }
-
-    for (const attendee of processedAttendees) {
-      try {
-        
-        await Ticket.create({
-          ticketCode: attendee.ticketCode,
-          holderName: attendee.fullName,
-          email: attendee.email,
-          phone: attendee.phone,
-          ticketType: ticketType,
-          status: 'Active',
-          isCheckedIn: false,
-          registrationId: newRegistration._id
-        }).catch(() => {
-          
-          console.log("Ticket creation skipped or model structure differs.");
-        });
-      } catch (e) {
-        console.error("Error creating individual ticket record:", e);
-      }
-    }
-
-    const ticketAttachments = [];
-    const templateName = ticketType === 'full' ? 'fullpath.jpeg' : 'pre.jpeg';
-    const templatePath = path.join(__dirname, `../assets/images/${templateName}`);
-
-  
-    for (let i = 0; i < processedAttendees.length; i++) {
-      const attendee = processedAttendees[i];
-      const qrCodeBuffer = await QRCode.toBuffer(attendee.ticketCode, {
-        errorCorrectionLevel: 'H',
-        margin: 1,
-        width: 200, 
-        color: {
-          dark: '#000000',
-          light: '#ffffff'
-        }
-      });
-
-      const finalTicketBuffer = await sharp(templatePath)
-        .resize(1500, 500) 
-        .composite([
-          { 
-            input: qrCodeBuffer, 
-            top: 92,     
-            left: 1183   
-          }
-        ])
-        .png()
-        .toBuffer();
-
-
-
-      ticketAttachments.push({
-        filename: `Ticket-${attendee.name.replace(/\s+/g, '-')}.png`,
-        content: finalTicketBuffer,
-        contentType: 'image/png'
-      });
-    }
-
-    const bookingData = {
-      bookingId: newRegistration._id.toString(),
-      buyerName: fullName,
-      ticketType,
-      numberOfTickets,
-      totalAmount
-    };
-
-    await sendTicketsEmail(email, bookingData, ticketAttachments);
-
     return res.status(201).json({
       success: true,
-      message: 'success registration!',
+      message: 'Registration created successfully! Awaiting admin approval.',
       registrationId: newRegistration._id
     });
 
@@ -324,6 +260,81 @@ router.patch('/registrations/:id', ticketsAuthMiddleware, async (req, res) => {
     const registration = await Registration.findById(id);
     if (!registration) {
       return res.status(404).json({ error: 'Registration not found' });
+    }
+
+    if (registration.status === status) {
+      return res.json({ success: true, registration });
+    }
+
+    if (status === 'Accepted' && registration.status === 'Pending') {
+      const ticketInventory = await Ticket.findOne({ ticketType: registration.ticketType });
+      if (ticketInventory) {
+        if (ticketInventory.maxCapacity - ticketInventory.soldCount < registration.numberOfTickets) {
+           return res.status(400).json({ error: 'Not enough tickets available' });
+        }
+        ticketInventory.soldCount += registration.numberOfTickets;
+        await ticketInventory.save();
+      }
+
+      for (const attendee of registration.attendees) {
+        try {
+          await Ticket.create({
+            ticketCode: attendee.ticketCode,
+            holderName: attendee.fullName || attendee.name || registration.fullName,
+            email: attendee.email || registration.email,
+            phone: attendee.phone || registration.phoneNumber,
+            ticketType: registration.ticketType,
+            status: 'Active',
+            isCheckedIn: false,
+            registrationId: registration._id
+          }).catch(() => {
+            console.log("Ticket creation skipped or model structure differs.");
+          });
+        } catch (e) {
+          console.error("Error creating individual ticket record:", e);
+        }
+      }
+
+      const ticketAttachments = [];
+      const templateName = registration.ticketType === 'full' ? 'fullpath.jpeg' : 'pre.jpeg';
+      const templatePath = path.join(__dirname, `../assets/images/${templateName}`);
+
+      for (let i = 0; i < registration.attendees.length; i++) {
+        const attendee = registration.attendees[i];
+        const qrCodeBuffer = await QRCode.toBuffer(attendee.ticketCode, {
+          errorCorrectionLevel: 'H',
+          margin: 1,
+          width: 200, 
+          color: { dark: '#000000', light: '#ffffff' }
+        });
+
+        const finalTicketBuffer = await sharp(templatePath)
+          .resize(1500, 500) 
+          .composite([{ input: qrCodeBuffer, top: 92, left: 1183 }])
+          .png()
+          .toBuffer();
+
+        const attendeeName = attendee.fullName || attendee.name || registration.fullName;
+        ticketAttachments.push({
+          filename: `Ticket-${attendeeName.replace(/\s+/g, '-')}.png`,
+          content: finalTicketBuffer,
+          contentType: 'image/png'
+        });
+      }
+
+      const bookingData = {
+        bookingId: registration._id.toString(),
+        buyerName: registration.fullName,
+        ticketType: registration.ticketType,
+        numberOfTickets: registration.numberOfTickets,
+        totalAmount: registration.totalAmount
+      };
+
+      try {
+        await sendTicketsEmail(registration.email, bookingData, ticketAttachments);
+      } catch (e) {
+        console.error("Failed to send ticket email:", e);
+      }
     }
 
     registration.status = status;
