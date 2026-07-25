@@ -584,6 +584,23 @@ const TicketsManagement: React.FC = () => {
                     <Typography sx={{ color: '#666', fontSize: '0.85rem', mb: 2 }}>
                       Total Capacity: {fullStats.capacity} | Sold: {fullStats.sold}
                     </Typography>
+                     <Button
+                      size="small"
+                      startIcon={<AddIcon />}
+                      onClick={handleAddTicket}
+                      sx={{
+                        background: '#E62B1F',
+                        color: '#FFFFFF',
+                        textTransform: 'none',
+                        fontWeight: 600,
+                        borderRadius: 2,
+                        '&:hover': {
+                          background: '#c5241a',
+                        },
+                      }}
+                    >
+                      Add Ticket
+                    </Button>
                   </CardContent>
                 </Card>
               </Fade>

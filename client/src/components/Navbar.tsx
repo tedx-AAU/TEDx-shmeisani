@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+// استيراد الشعار بدون خلفية
+import logoImage from '../assets/images/tedx.white.png';
+
 interface NavbarProps {
   currentView:
     | 'home'
@@ -36,18 +39,22 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/95 backdrop-blur-md border-b border-white/10 py-2' : 'bg-transparent py-4'}`}
-    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
+      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/95 backdrop-blur-md border-b border-white/15 py-1' : 'bg-transparent py-3'}`}
+      style={{ fontFamily: "'Childos Arabic', sans-serif" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center h-16">
+          
+          {/* --- اللوجو بحجم كبير دون زيادة عرض النافبار --- */}
           <div
-            className="flex-shrink-0 flex items-center cursor-pointer"
+            className="flex-shrink-0 flex items-center cursor-pointer relative py-2"
             onClick={() => onNavigate('home')}
           >
-            <span className=" text-2xl font-bold">
-              <span className="text-red-600">TEDx</span>
-              <span className="text-white">Shmeisani</span>
-            </span>
+            <img 
+              src={logoImage} 
+              alt="TEDx Shmeisani Logo" 
+              className="h-16 sm:h-20 md:h-24 w-auto object-contain transform scale-125 origin-right md:origin-center" 
+            />
           </div>
 
           <div className="hidden md:flex space-x-10 items-center">
@@ -65,7 +72,6 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 {link.name}
               </button>
             ))}
-          
           </div>
 
           <div className="md:hidden flex items-center">
@@ -100,8 +106,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-black border-b border-white/10">
+        <div className="md:hidden bg-black/95 backdrop-blur-md border-b border-white/10">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <button
@@ -115,13 +122,11 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 {link.name}
               </button>
             ))}
-          
           </div>
         </div>
       )}
     </nav>
   );
 };
-
 
 export default Navbar;

@@ -1,16 +1,36 @@
 import React from 'react';
 
+// استيراد الشعار بدون خلفية
+import logoImage from '../assets/images/tedx.white.png';
+
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-black border-t border-white/5 pt-24 pb-12"
-    style={{ fontFamily: "'Childos Arabic', sans-serif" }}>
+    <footer 
+      className="bg-black border-t border-white/5 pt-24 pb-12"
+      style={{ fontFamily: "'Childos Arabic', sans-serif" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-20">
-          <span className=" text-4xl font-bold mb-8 block">
-            <span className="text-red-600">TEDx</span>Shmeisani
-          </span>
+          
+          {/* --- استبدال النص بالشعار الكبير في الفوتر --- */}
+          <div className="mb-8">
+            <img 
+              src={logoImage} 
+              alt="TEDx Shmeisani Logo" 
+              className="h-24 md:h-32 w-auto object-contain" 
+            />
+          </div>
+
           <p className="text-gray-400 max-w-sm mb-10 leading-relaxed text-lg font-light">
-            Location:<a href=" https://maps.app.goo.gl/a3HKhBVbSpbWcxrg9" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline">  Shmeisani— Amman, Jordan</a>
+            Location:
+            <a 
+              href="https://maps.app.goo.gl/a3HKhBVbSpbWcxrg9" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-red-600 hover:underline"
+            >
+              Shmeisani — Amman, Jordan
+            </a>
           </p>
         </div>
 
