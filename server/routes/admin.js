@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Admin = require('../models/Admin'); 
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcryptjs');
 const ticketsAuthMiddleware = require('../middleware/ticketsAuth');
 
 router.get('/tickets-verify', ticketsAuthMiddleware, async (req, res) => {
