@@ -16,6 +16,7 @@ import Navbar from './components/Navbar';
 import { AuthProvider } from './contexts/AuthContext';
 import TicketsLogin from './pages/TicketsLogin';
 import TicketsManagement from './pages/TicketsManagement';
+import CheckInPage from './pages/CheckInPage';
 import SpeakersPage from './pages/SpeakersPage';
 import SchedulePage from './pages/SchedulePage';
 import TeamPage from './pages/TeamPage';
@@ -64,6 +65,7 @@ const RouterContent: React.FC = () => {
 
         <Route path="/tickets-login" element={<TicketsLogin />} /> 
         <Route path="/tickets-management" element={<TicketsManagement />} />
+        <Route path="/check-in" element={<CheckInPage />} />
       
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

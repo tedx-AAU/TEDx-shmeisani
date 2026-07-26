@@ -1,6 +1,4 @@
 import React from 'react';
-
-// استيراد الشعار بدون خلفية
 import logoImage from '../assets/images/tedx.white.png';
 
 const Footer: React.FC = () => {
@@ -11,8 +9,6 @@ const Footer: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-20">
-          
-          {/* --- استبدال النص بالشعار الكبير في الفوتر --- */}
           <div className="mb-8">
             <img 
               src={logoImage} 

@@ -1,23 +1,21 @@
 const nodemailer = require('nodemailer');
 
-
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,         
-    secure: true,   
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: false, 
     auth: {
-      user: 'tedxalshmaisani.jo@gmail.com',
-      pass: 'vvto qykm sxsx yhme',
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
     connectionTimeout: 10000, 
     greetingTimeout: 10000,  
   });
 };
 
-
 const emailTemplates = {
- 
+  
   ticketDelivery: (bookingData) => ({
     subject: `🎉 Your TEDx Shmeisani Tickets Are Confirmed! `,
     html: `
@@ -90,7 +88,6 @@ The TEDx Shmeisani Team
     `,
   }),
 
-  
   contactNotification: (contactData) => ({
     subject: `🚨 New Contact Message from ${contactData.name} - TEDxShmeisani`,
     html: `
@@ -127,7 +124,6 @@ Message:
 ${contactData.message}
     `
   }),
-
 
   contactConfirmation: (contactData) => ({
     subject: ' Thank you for contacting TEDxShmeisani!',
@@ -178,15 +174,13 @@ The TEDx Shmeisani Team
   })
 };
 
-
 const sendEmail = async (to, template, data, attachments = []) => {
   try {
     const transporter = createTransporter();
     const emailContent = template(data);
 
     const mailOptions = {
-      from: `"TEDx Shmeisani" <tedxalshmaisani.jo@gmail.com>`, 
-      to: to,
+      from: `"TEDx Shmeisani" <${process.env.SMTP_USER}>`,
       subject: emailContent.subject,
       text: emailContent.text,
       html: emailContent.html,
@@ -201,7 +195,6 @@ const sendEmail = async (to, template, data, attachments = []) => {
     return { success: false, error: error.message };
   }
 };
-
 
 const sendTicketsEmail = async (to, bookingData, ticketAttachments) => {
   return await sendEmail(

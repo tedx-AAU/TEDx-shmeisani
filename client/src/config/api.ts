@@ -23,6 +23,12 @@ export const apiConfig = {
       sendOtp: `${API_URL}/api/registration/send-otp`,
       verifyOtp: `${API_URL}/api/registration/verify-otp`,
     },
+    checkin: {
+      login: `${API_URL}/api/checkin/login`,
+      verify: `${API_URL}/api/checkin/verify`,
+      lookup: (ticketCode: string) => `${API_URL}/api/checkin/${ticketCode}`,
+      confirm: (ticketCode: string) => `${API_URL}/api/checkin/${ticketCode}`,
+    },
   },
 };
 
