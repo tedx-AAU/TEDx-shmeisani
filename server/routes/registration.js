@@ -173,7 +173,6 @@ router.post('/', async (req, res) => {
     const registrationCount = await Registration.countDocuments();
     const customerNumber = 1000 + registrationCount + 1;
 
-    // 1. حفظ التسجيل الرئيسي
     const newRegistration = new Registration({
       customerNumber,
       fullName,
@@ -295,31 +294,70 @@ router.patch('/registrations/:id', ticketsAuthMiddleware, async (req, res) => {
         }
       }
 
-      const ticketAttachments = [];
-      const templateName = registration.ticketType === 'full' ? 'fullpath.jpeg' : 'pre.jpeg';
-      const templatePath = path.join(__dirname, `../assets/images/${templateName}`);
+const ticketAttachments = [];
+      
+      const mainTemplatePath = path.join(__dirname, '../assets/images/fullpath.jpeg');
+      const preTemplatePath = path.join(__dirname, '../assets/images/pre.jpeg');
 
       for (let i = 0; i < registration.attendees.length; i++) {
         const attendee = registration.attendees[i];
-        const qrCodeBuffer = await QRCode.toBuffer(attendee.ticketCode, {
-          errorCorrectionLevel: 'H',
-          margin: 1,
-          width: 200, 
-          color: { dark: '#000000', light: '#ffffff' }
-        });
-
-        const finalTicketBuffer = await sharp(templatePath)
-          .resize(1500, 500) 
-          .composite([{ input: qrCodeBuffer, top: 92, left: 1183 }])
-          .png()
-          .toBuffer();
-
         const attendeeName = attendee.fullName || attendee.name || registration.fullName;
-        ticketAttachments.push({
-          filename: `Ticket-${attendeeName.replace(/\s+/g, '-')}.png`,
-          content: finalTicketBuffer,
-          contentType: 'image/png'
-        });
+        const cleanName = attendeeName.replace(/\s+/g, '-');
+
+        if (registration.ticketType === 'main') {
+          const qrCodeBuffer = await QRCode.toBuffer(attendee.ticketCode, {
+            errorCorrectionLevel: 'H', margin: 1, width: 200, color: { dark: '#000000', light: '#ffffff' }
+          });
+
+          const mainTicketBuffer = await sharp(mainTemplatePath)
+            .resize(1500, 500) 
+            .composite([{ input: qrCodeBuffer, top: 92, left: 1183 }])
+            .png()
+            .toBuffer();
+
+          ticketAttachments.push({
+            filename: `Main-Ticket-${cleanName}.png`,
+            content: mainTicketBuffer,
+            contentType: 'image/png'
+          });
+        } 
+        
+        // full path(pre +main)
+        else if (registration.ticketType === 'full') {
+         //pre
+          const preQrCodeBuffer = await QRCode.toBuffer(`${attendee.ticketCode}-PRE`, {
+            errorCorrectionLevel: 'H', margin: 1, width: 200, color: { dark: '#000000', light: '#ffffff' }
+          });
+
+          const preTicketBuffer = await sharp(preTemplatePath)
+            .resize(1500, 500) 
+            .composite([{ input: preQrCodeBuffer, top: 92, left: 1183 }])
+            .png()
+            .toBuffer();
+
+          ticketAttachments.push({
+            filename: `Pre-TEDx-Ticket-${cleanName}.png`,
+            content: preTicketBuffer,
+            contentType: 'image/png'
+          });
+
+          // main ticket
+          const mainQrCodeBuffer = await QRCode.toBuffer(`${attendee.ticketCode}-MAIN`, {
+            errorCorrectionLevel: 'H', margin: 1, width: 200, color: { dark: '#000000', light: '#ffffff' }
+          });
+
+          const mainTicketBuffer = await sharp(mainTemplatePath)
+            .resize(1500, 500) 
+            .composite([{ input: mainQrCodeBuffer, top: 92, left: 1183 }])
+            .png()
+            .toBuffer();
+
+          ticketAttachments.push({
+            filename: `Main-Ticket-${cleanName}.png`,
+            content: mainTicketBuffer,
+            contentType: 'image/png'
+          });
+        }
       }
 
       const bookingData = {

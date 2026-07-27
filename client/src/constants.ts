@@ -268,7 +268,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: '8',
     name: 'Tasneem Theeb',
-    role: 'Mrketing Team Member',
+    role: 'Marketing Team Member',
     imageUrl: team7,
     linkedin: '',
   },
@@ -296,14 +296,14 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: '12',
     name: 'Zahra Migdadi',
-    role: 'Speaker Curation Leader',
+    role: 'Speakers Coordinator',
     imageUrl: team11,
     linkedin: '',
   },
   {
     id: '13',
     name: 'Aryam Alzaben',
-    role: 'Speaker Curation Team Member',
+    role: 'Speakers Coordinator',
     imageUrl: team12,
     linkedin: '',
   },

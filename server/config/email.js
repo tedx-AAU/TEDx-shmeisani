@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const createTransporter = () => {
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
+    port:  587,
     secure: false,
     auth: {
       user: 'tedxalshmaisani.jo@gmail.com',
@@ -48,13 +48,14 @@ const emailTemplates = {
             <p>Here are your booking details:</p>
             
             <div class="details-box">
-              <div class="details-row"><span class="label">Ticket Type:</span> <span class="value">${bookingData.ticketType === 'full' ? 'Full Pathway (Pre-TEDx + Main TEDx)' : 'Main Event'}</span></div>
+              <div class="details-row"><span class="label">Ticket Type:</span> <span class="value">${bookingData.ticketType === 'full' ? 'Full Pathway (Pre-TEDx + Main TEDx)' : 'Main Event (Main TEDx)'}</span></div>
               <div class="details-row"><span class="label">Number of Tickets:</span> <span class="value">${bookingData.numberOfTickets}</span></div>
               <div class="details-row"><span class="label">Total Paid:</span> <span class="value">${bookingData.totalAmount} JD</span></div>
             </div>
 
             <p style="background: #fff3f3; color: #b71c1c; padding: 15px; border-radius: 6px; font-weight: bold; border-left: 4px solid #EB0028;">
               🚨 Important: We have attached your digital tickets to this email. Please download them and make sure to show the QR/Barcode on each ticket at the entrance gate.
+              ${bookingData.ticketType === 'full' ? '<br><br>👉 Note: Since you booked the Full Pathway, you will find <strong>two tickets attached for each person</strong> (one for Pre-TEDx and one for Main TEDx).' : ''}
             </p>
 
             <p>We can't wait to see you soon and share an inspiring experience together!</p>
@@ -71,7 +72,7 @@ const emailTemplates = {
     text: `
 Hi ${bookingData.buyerName},
 
-Thank you for joining us at TEDx Shmeisani.
+Thank you for joining us at TEDx Shmaisani.
 Your registration has been successfully received and confirmed!
 
 Booking Details:
@@ -79,13 +80,11 @@ Booking Details:
 - Number of Tickets: ${bookingData.numberOfTickets}
 - Total Paid: ${bookingData.totalAmount} JD
 
-🚨 Important: We have attached your digital tickets to this email. Please download them and present the QR/Barcode at the entrance gate.
 
 Best regards,
 The TEDx AlShmaisani Team
     `,
   }),
-
   contactNotification: (contactData) => ({
     subject: `🚨 New Contact Message from ${contactData.name} - TEDx AlShmaisani`,
     html: `
@@ -162,7 +161,7 @@ ${contactData.message}
     text: `
 Hello ${contactData.name},
 
-Thank you for reaching out to TEDx AlShmeisani! We have received your message regarding "${contactData.subject || 'General Inquiry'}".
+Thank you for reaching out to TEDx AlShmaisani! We have received your message regarding "${contactData.subject || 'General Inquiry'}".
 
 Our team is currently reviewing your message and will get back to you as soon as possible.
 
