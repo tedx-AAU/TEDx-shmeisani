@@ -41,6 +41,12 @@ import partnerSilver4 from './assets/images/بلدنا.png';
 import partnerSilver1 from './assets/images/دوناتري.jpg';
 import partnerSilver2 from './assets/images/snips.png';
 import partnerSilver3 from './assets/images/كناري.png';
+import partnerSilver5 from './assets/images/راديو هلا.jpg';
+import partnerSilver6 from './assets/images/bliss-cover.jpg';
+import partnerSilver7 from './assets/images/good day.jpg';
+import partnerSilver8 from './assets/images/thirty.jpg.jpeg';
+import partnerSilver9 from './assets/images/الراي.jpg';
+
 
 
 export const SPEAKERS: Speaker[] = [
@@ -179,6 +185,31 @@ export const PARTNERS: Partner[] = [
    {
     name: 'بلدنا',
     logoUrl: partnerSilver4,
+    tier: 'Gold',
+  },
+     {
+    name: 'راديو هلا',
+    logoUrl: partnerSilver5,
+    tier: 'Gold',
+  },
+    {
+    name: 'bliss',
+    logoUrl: partnerSilver6,
+    tier: 'Gold',
+  },
+    {
+    name: 'good day',
+    logoUrl: partnerSilver7,
+    tier: 'Gold',
+  },
+    {
+    name: 'thirty',
+    logoUrl: partnerSilver8,
+    tier: 'Gold',
+  },
+     {
+    name: 'الرأي',
+    logoUrl: partnerSilver9,
     tier: 'Gold',
   }
 ];

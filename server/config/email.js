@@ -15,15 +15,15 @@ const createTransporter = () => {
 
 const emailTemplates = {
   ticketDelivery: (bookingData) => ({
-    subject: `🎉 Your TEDx ALShmeisani Tickets Are Confirmed!`,
+    subject: `🎉 Your TEDx ALShmaisani Tickets Are Confirmed!`,
     html: `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Your Tickets - TEDx AlShmeisani</title>
-        <style>
+        <title>Your Tickets - TEDx AlShmaisani</title>
+               <style>
           body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
           .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid #EB0028; }
           .header { background: #000000; padding: 30px; text-align: center; }
@@ -40,11 +40,11 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">TEDx<span style="color:#ffffff;">ALShmeisani</span></div>
+            <div class="logo">TEDx<span style="color:#ffffff;">ALShmaisani</span></div>
           </div>
           <div class="content">
             <div class="headline">Hi ${bookingData.buyerName},</div>
-            <p>Thank you for joining us at <strong>TEDx AlShmeisani</strong>. Your registration has been successfully received and confirmed!</p>
+            <p>Thank you for joining us at <strong>TEDx AlShmaisani</strong>. Your registration has been successfully received and confirmed!</p>
             <p>Here are your booking details:</p>
             
             <div class="details-box">
@@ -58,10 +58,10 @@ const emailTemplates = {
             </p>
 
             <p>We can't wait to see you soon and share an inspiring experience together!</p>
-            <p>Best regards,<br><strong>The TEDx AlShmeisani Team</strong></p>
+            <p>Best regards,<br><strong>The TEDx AlShmaisani Team</strong></p>
           </div>
           <div class="footer">
-            TEDx AlShmeisani • Amman, Jordan <br>
+            TEDx AlShmaisani • Amman, Jordan <br>
             This is an automated delivery email regarding your ticket purchase.
           </div>
         </div>
@@ -82,12 +82,12 @@ Booking Details:
 🚨 Important: We have attached your digital tickets to this email. Please download them and present the QR/Barcode at the entrance gate.
 
 Best regards,
-The TEDx AlShmeisani Team
+The TEDx AlShmaisani Team
     `,
   }),
 
   contactNotification: (contactData) => ({
-    subject: `🚨 New Contact Message from ${contactData.name} - TEDx AlShmeisani`,
+    subject: `🚨 New Contact Message from ${contactData.name} - TEDx AlShmaisani`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -114,7 +114,7 @@ The TEDx AlShmeisani Team
       </html>
     `,
     text: `
-🚨 New Contact Message - TEDx AlShmeisani
+🚨 New Contact Message - TEDx AlShmaisani
 Name: ${contactData.name}
 Email: ${contactData.email}
 Subject: ${contactData.subject || 'No Subject'}
@@ -124,7 +124,7 @@ ${contactData.message}
   }),
 
   contactConfirmation: (contactData) => ({
-    subject: ' Thank you for contacting TEDx AlShmeisani!',
+    subject: ' Thank you for contacting TEDx AlShmaisani!',
     html: `
       <!DOCTYPE html>
       <html>
@@ -142,7 +142,7 @@ ${contactData.message}
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">TEDx<span style="color:#ffffff;">AlShmeisani</span></div>
+            <div class="logo">TEDx<span style="color:#ffffff;">AlShmaisani</span></div>
           </div>
           <div class="content">
             <h3>Hello ${contactData.name},</h3>
@@ -150,10 +150,10 @@ ${contactData.message}
             <p>Our team is currently reviewing your message and will get back to you as soon as possible.</p>
             <br>
             <p>Best regards,</p>
-            <p><strong>The TEDx AlShmeisani Team</strong></p>
+            <p><strong>The TEDx AlShmaisani Team</strong></p>
           </div>
           <div class="footer">
-            TEDx AlShmeisani • Amman, Jordan
+            TEDx AlShmaisani • Amman, Jordan
           </div>
         </div>
       </body>
@@ -167,7 +167,7 @@ Thank you for reaching out to TEDx AlShmeisani! We have received your message re
 Our team is currently reviewing your message and will get back to you as soon as possible.
 
 Best regards,
-The TEDx AlShmeisani Team
+The TEDx AlShmaisani Team
     `
   })
 };
@@ -184,7 +184,7 @@ const sendEmail = async (to, template, data) => {
     const emailContent = template(data);
 
     const mailOptions = {
-      from: `"TEDx AlShmeisani" <tedxalshmaisani.jo@gmail.com>`,
+      from: `"TEDx AlShmaisani" <tedxalshmaisani.jo@gmail.com>`,
       to: to,
       subject: emailContent.subject,
       text: emailContent.text,
@@ -212,7 +212,7 @@ const sendTicketsEmail = async (to, bookingData, ticketAttachments) => {
     const emailContent = emailTemplates.ticketDelivery(bookingData);
 
     const mailOptions = {
-      from: `"TEDx AlShmeisani" <tedxalshmaisani.jo@gmail.com>`,
+      from: `"TEDx AlShmaisani" <tedxalshmaisani.jo@gmail.com>`,
       to: to,
       subject: emailContent.subject,
       text: emailContent.text,
@@ -259,7 +259,7 @@ const sendCustomEmail = async (to, subject, message) => {
     const transporter = createTransporter();
 
     const mailOptions = {
-      from: `"TEDx AlShmeisani" <tedxalshmaisani.jo@gmail.com>`,
+      from: `"TEDx AlShmaisani" <tedxalshmaisani.jo@gmail.com>`,
       to: to,
       subject: subject,
       text: message,

@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer" 
               className="text-red-600 hover:underline"
             >
-              Shmeisani — Amman, Jordan
+              AlShmaisani — Amman, Jordan
             </a>
           </p>
         </div>
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
             under license from TED.
           </p>
           <p className="text-xs text-gray-400 font-medium mb-2">
-            &copy; {new Date().getFullYear()} TEDx Shmeisani.
+            &copy; {new Date().getFullYear()} TEDx AlShmaisani.
           </p>
           <p className="text-xs text-gray-500">
             Developed by Skyfall Enterprises

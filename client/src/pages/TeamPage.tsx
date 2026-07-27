@@ -79,7 +79,7 @@ const TeamPage: React.FC = () => {
               {/* Default Gradient Bottom for Visibility */}
               <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent group-hover:opacity-0 transition-opacity" />
               <div className="absolute bottom-6 left-6 group-hover:opacity-0 transition-opacity">
-                <h4 className="text-xl font-oswald font-bold">{member.name}</h4>
+                <h4 className="text-xl font-bold">{member.name}</h4>
                 <p className="text-red-500 text-xs font-bold uppercase tracking-widest">
                   {member.role}
                 </p>

@@ -21,7 +21,7 @@ const Hero: React.FC<HeroProps> = ({ onSeeSpeakers, onGetTickets }) => {
 
       <div className="relative z-10 text-center px-4 max-w-5xl">
         <h2 className="text-red-600 font-bold tracking-[0.4em] mb-6 uppercase text-xl md:text-2xl">
-          TEDx shmeisani
+          TEDx Alshmaisani
         </h2>
         <h1 className="text-white text-6xl md:text-9xl font-extrabold mb-8 leading-none tracking-tighter">
           كل طريق ببدا  <span className="text-red-600">بنقطة</span>
@@ -39,7 +39,7 @@ const Hero: React.FC<HeroProps> = ({ onSeeSpeakers, onGetTickets }) => {
             onClick={onSeeSpeakers}
             className="w-full sm:w-auto bg-transparent border-2 border-white/20 text-white px-12 py-5 rounded-full font-bold text-lg hover:border-red-600 hover:text-red-600 transition-all"
           >
-            Meet Speakers
+            Meet Our Speakers
           </button>
         </div>
       </div>

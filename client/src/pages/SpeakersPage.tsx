@@ -11,7 +11,7 @@ const SpeakersPage: React.FC = () => {
             The Voices
           </h2>
           <h1 className="text-6xl md:text-8xl font-extrabold tracking-tight">
-            SPEAKERS <span className="text-red-600">GALLERY</span>
+             صُنّاع <span className="text-red-600">السمت </span>
           </h1>
         </header>
 
