@@ -1,30 +1,28 @@
 const nodemailer = require('nodemailer');
 
+// Create reusable transporter object using SMTP transport for Gmail
 const createTransporter = () => {
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: false, 
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: 'tedxalshmaisani.jo@gmail.com',
+      pass: 'vvtoqykmsxsxyhme',
     },
-    connectionTimeout: 10000, 
-    greetingTimeout: 10000,  
   });
 };
 
 const emailTemplates = {
-  
   ticketDelivery: (bookingData) => ({
-    subject: `🎉 Your TEDx Shmeisani Tickets Are Confirmed! `,
+    subject: `🎉 Your TEDx ALShmeisani Tickets Are Confirmed!`,
     html: `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Your Tickets - TEDx Shmeisani</title>
+        <title>Your Tickets - TEDx AlShmeisani</title>
         <style>
           body { font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
           .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 6px solid #EB0028; }
@@ -42,11 +40,11 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">TEDx<span style="color:#ffffff;">Shmeisani</span></div>
+            <div class="logo">TEDx<span style="color:#ffffff;">ALShmeisani</span></div>
           </div>
           <div class="content">
             <div class="headline">Hi ${bookingData.buyerName},</div>
-            <p>Thank you for joining us at <strong>TEDx Shmeisani</strong>. Your registration has been successfully received and confirmed!</p>
+            <p>Thank you for joining us at <strong>TEDx AlShmeisani</strong>. Your registration has been successfully received and confirmed!</p>
             <p>Here are your booking details:</p>
             
             <div class="details-box">
@@ -60,10 +58,10 @@ const emailTemplates = {
             </p>
 
             <p>We can't wait to see you soon and share an inspiring experience together!</p>
-            <p>Best regards,<br><strong>The TEDx Shmeisani Team</strong></p>
+            <p>Best regards,<br><strong>The TEDx AlShmeisani Team</strong></p>
           </div>
           <div class="footer">
-            TEDx Shmeisani • Amman, Jordan <br>
+            TEDx AlShmeisani • Amman, Jordan <br>
             This is an automated delivery email regarding your ticket purchase.
           </div>
         </div>
@@ -81,15 +79,15 @@ Booking Details:
 - Number of Tickets: ${bookingData.numberOfTickets}
 - Total Paid: ${bookingData.totalAmount} JD
 
-🚨 Important: We have attached your digital tickets (Images) to this email. Please download them and present the QR/Barcode at the entrance gate.
+🚨 Important: We have attached your digital tickets to this email. Please download them and present the QR/Barcode at the entrance gate.
 
 Best regards,
-The TEDx Shmeisani Team
+The TEDx AlShmeisani Team
     `,
   }),
 
   contactNotification: (contactData) => ({
-    subject: `🚨 New Contact Message from ${contactData.name} - TEDxShmeisani`,
+    subject: `🚨 New Contact Message from ${contactData.name} - TEDx AlShmeisani`,
     html: `
       <!DOCTYPE html>
       <html>
@@ -116,7 +114,7 @@ The TEDx Shmeisani Team
       </html>
     `,
     text: `
-🚨 New Contact Message - TEDxShmeisani
+🚨 New Contact Message - TEDx AlShmeisani
 Name: ${contactData.name}
 Email: ${contactData.email}
 Subject: ${contactData.subject || 'No Subject'}
@@ -126,7 +124,7 @@ ${contactData.message}
   }),
 
   contactConfirmation: (contactData) => ({
-    subject: ' Thank you for contacting TEDxShmeisani!',
+    subject: ' Thank you for contacting TEDx AlShmeisani!',
     html: `
       <!DOCTYPE html>
       <html>
@@ -144,7 +142,7 @@ ${contactData.message}
       <body>
         <div class="container">
           <div class="header">
-            <div class="logo">TEDx<span style="color:#ffffff;">Shmeisani</span></div>
+            <div class="logo">TEDx<span style="color:#ffffff;">AlShmeisani</span></div>
           </div>
           <div class="content">
             <h3>Hello ${contactData.name},</h3>
@@ -152,10 +150,10 @@ ${contactData.message}
             <p>Our team is currently reviewing your message and will get back to you as soon as possible.</p>
             <br>
             <p>Best regards,</p>
-            <p><strong>The TEDx Shmeisani Team</strong></p>
+            <p><strong>The TEDx AlShmeisani Team</strong></p>
           </div>
           <div class="footer">
-            TEDx Shmeisani • Amman, Jordan
+            TEDx AlShmeisani • Amman, Jordan
           </div>
         </div>
       </body>
@@ -164,27 +162,33 @@ ${contactData.message}
     text: `
 Hello ${contactData.name},
 
-Thank you for reaching out to TEDxShmeisani! We have received your message regarding "${contactData.subject || 'General Inquiry'}".
+Thank you for reaching out to TEDx AlShmeisani! We have received your message regarding "${contactData.subject || 'General Inquiry'}".
 
 Our team is currently reviewing your message and will get back to you as soon as possible.
 
 Best regards,
-The TEDx Shmeisani Team
+The TEDx AlShmeisani Team
     `
   })
 };
 
-const sendEmail = async (to, template, data, attachments = []) => {
+// Send email base function
+const sendEmail = async (to, template, data) => {
   try {
+    if (!to) {
+      console.error('Error: No recipient email provided!');
+      return { success: false, error: 'No recipients defined' };
+    }
+
     const transporter = createTransporter();
     const emailContent = template(data);
 
     const mailOptions = {
-      from: `"TEDx Shmeisani" <${process.env.SMTP_USER}>`,
+      from: `"TEDx AlShmeisani" <tedxalshmaisani.jo@gmail.com>`,
+      to: to,
       subject: emailContent.subject,
       text: emailContent.text,
       html: emailContent.html,
-      attachments: attachments,
     };
 
     const result = await transporter.sendMail(mailOptions);
@@ -196,17 +200,85 @@ const sendEmail = async (to, template, data, attachments = []) => {
   }
 };
 
+// Send tickets email with attachments support
 const sendTicketsEmail = async (to, bookingData, ticketAttachments) => {
+  try {
+    if (!to) {
+      console.error('Error: No recipient email provided for tickets!');
+      return { success: false, error: 'No recipients defined' };
+    }
+
+    const transporter = createTransporter();
+    const emailContent = emailTemplates.ticketDelivery(bookingData);
+
+    const mailOptions = {
+      from: `"TEDx AlShmeisani" <tedxalshmaisani.jo@gmail.com>`,
+      to: to,
+      subject: emailContent.subject,
+      text: emailContent.text,
+      html: emailContent.html,
+      attachments: ticketAttachments || []
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Tickets email sent successfully:', result.messageId);
+    return { success: true, messageId: result.messageId };
+  } catch (error) {
+    console.error('Error sending tickets email:', error);
+    return { success: false, error: error.message };
+  }
+};
+
+// Send contact notification to admin
+const sendContactNotification = async (contactData) => {
+  const adminEmail = 'tedxalshmaisani.jo@gmail.com';
   return await sendEmail(
-    to,
-    emailTemplates.ticketDelivery,
-    bookingData,
-    ticketAttachments
+    adminEmail,
+    emailTemplates.contactNotification,
+    contactData
   );
+};
+
+// Send confirmation email to user
+const sendContactConfirmation = async (contactData) => {
+  return await sendEmail(
+    contactData.email,
+    emailTemplates.contactConfirmation,
+    contactData
+  );
+};
+
+// Send custom email
+const sendCustomEmail = async (to, subject, message) => {
+  try {
+    if (!to) {
+      console.error('Error: No recipient email provided!');
+      return { success: false, error: 'No recipients defined' };
+    }
+
+    const transporter = createTransporter();
+
+    const mailOptions = {
+      from: `"TEDx AlShmeisani" <tedxalshmaisani.jo@gmail.com>`,
+      to: to,
+      subject: subject,
+      text: message,
+    };
+
+    const result = await transporter.sendMail(mailOptions);
+    console.log('Custom email sent successfully:', result.messageId);
+    return { success: true, messageId: result.messageId };
+  } catch (error) {
+    console.error('Error sending custom email:', error);
+    return { success: false, error: error.message };
+  }
 };
 
 module.exports = {
   sendEmail,
   sendTicketsEmail,
+  sendContactNotification,
+  sendContactConfirmation,
+  sendCustomEmail,
   emailTemplates,
 };
