@@ -78,6 +78,4 @@ const registrationSchema = new mongoose.Schema(
 );
 
 
-registrationSchema.index({ "attendees.ticketCode": 1 });
-
 module.exports = mongoose.model('Registration', registrationSchema);
