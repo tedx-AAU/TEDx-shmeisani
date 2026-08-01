@@ -266,7 +266,6 @@ const onSubmit = async (data: FormData) => {
                 }
               }}>
                 
-                {/* قسم اختيار التذاكر */}
                 <Grid container spacing={3} sx={{ mb: 3 }}>
                   <Grid size={{ xs: 12, sm: 8 }}>
                     <FormControl fullWidth>
@@ -278,7 +277,7 @@ const onSubmit = async (data: FormData) => {
                         fullWidth
                       >
                         <MenuItem value="main">Main TEDx Event (نقطة البداية) — 10.50 JD</MenuItem>
-                        <MenuItem value="full">Full Pathway (Pre-TEDx + Main) — 14.50 JD</MenuItem>
+                       {/*<MenuItem value="full">Full Pathway (Pre-TEDx + Main) — 14.50 JD</MenuItem> */} 
                       </Select>
                     </FormControl>
                   </Grid>
@@ -307,7 +306,7 @@ const onSubmit = async (data: FormData) => {
                   </Grid>
                 </Grid>
 
-                {/* عنوان تفاصيل المشتري */}
+              
                 <Box sx={{ mt: 4, mb: 3 }}>
                   <Typography variant="h6" sx={{ fontWeight: 600, color: '#E62B1F' }}>
                     Primary Attendee {ticketCount > 1 && '(Ticket #1)'}
@@ -316,7 +315,7 @@ const onSubmit = async (data: FormData) => {
                 </Box>
 
                 <Grid container spacing={2.5}>
-                  {/* السطر الأول */}
+               
                   <Grid size={{ xs: 12, sm: 5 }}>
                     <TextField
                       fullWidth
@@ -352,7 +351,7 @@ const onSubmit = async (data: FormData) => {
                     </FormControl>
                   </Grid>
 
-                  {/* السطر الثاني */}
+              
                   <Grid size={{ xs: 12, sm: 6 }}>
                     <TextField
                       fullWidth
@@ -373,7 +372,6 @@ const onSubmit = async (data: FormData) => {
                     />
                   </Grid>
 
-                  {/* السطر الثالث */}
                   <Grid size={{ xs: 12, sm: 4 }}>
                     <TextField
                       fullWidth
@@ -407,7 +405,7 @@ const onSubmit = async (data: FormData) => {
                     />
                   </Grid>
                 </Grid>
-                  {/* السطر الرابع والنهائي */}
+                 
                 <Box sx={{ mt: 5 }}>
                   <Grid container spacing={3}>
                     <Grid size={{ xs: 12, sm: 6 }}>
@@ -432,7 +430,6 @@ const onSubmit = async (data: FormData) => {
                       />
                     </Grid>
 
-                {/* الحاضرين الإضافيين */}
                 {fields.map((field, index) => {
                   const attendeeIndex = index; 
                   const isStudentWatched = watch(`attendees.${attendeeIndex}.isStudent`);
