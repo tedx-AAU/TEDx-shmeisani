@@ -1,21 +1,22 @@
 import React from 'react';
-import backgroundImage from'../assets/images/background.png';
+import backgroundImage from '../assets/images/background.png';
 interface HeroProps {
   onSeeSpeakers: () => void;
   onGetTickets: () => void;
 }
 
-const Hero: React.FC<HeroProps> = ({ onSeeSpeakers, onGetTickets }) => {
+const Hero: React.FC<HeroProps> = ({ onGetTickets }) => {
   return (
     <div className="relative h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background Image */}
-     <div 
-  className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-90"
-  style={{
-    backgroundImage: `url(${backgroundImage})`,
-    fontFamily: "'Childos Arabic', sans-serif" }}
-/>
-      
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-90"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          fontFamily: "'Childos Arabic', sans-serif",
+        }}
+      />
+
       {/* Overlay Gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-black z-1" />
 
@@ -24,9 +25,9 @@ const Hero: React.FC<HeroProps> = ({ onSeeSpeakers, onGetTickets }) => {
           TEDx Alshmaisani
         </h2>
         <h1 className="text-white text-6xl md:text-9xl font-extrabold mb-8 leading-none tracking-tighter">
-          كل طريق ببدا  <span className="text-red-600">بنقطة</span>
+          كل طريق ببدا <span className="text-red-600">بنقطة</span>
         </h1>
-      
+
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
           {/*tickets button on*/}
           <button
@@ -35,7 +36,6 @@ const Hero: React.FC<HeroProps> = ({ onSeeSpeakers, onGetTickets }) => {
           >
             Get Tickets
           </button>
-
         </div>
       </div>
     </div>

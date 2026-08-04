@@ -3,20 +3,22 @@ import Hero from '../components/Hero';
 import { useNavigate } from 'react-router-dom';
 import About from '../components/About';
 import OrganizerSection from '../components/OrganizerSection';
-import Partners from '../components/Partners'; 
+import Partners from '../components/Partners';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-black"
-     style={{ fontFamily: "'Childos Arabic', sans-serif" }} >
-        <Hero 
-        onSeeSpeakers={() => navigate('/speakers')} 
-        onGetTickets={() => navigate('/tickets')} 
+    <div
+      className="bg-black"
+      style={{ fontFamily: "'Childos Arabic', sans-serif" }}
+    >
+      <Hero
+        onSeeSpeakers={() => navigate('/speakers')}
+        onGetTickets={() => navigate('/tickets')}
       />
       <About />
-      
+
       <OrganizerSection />
 
       <Partners />

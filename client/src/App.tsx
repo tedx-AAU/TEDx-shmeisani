@@ -1,5 +1,4 @@
 import CssBaseline from '@mui/material/CssBaseline';
-import Booking from './pages/Booking';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useEffect, useMemo } from 'react';
 import {
@@ -14,14 +13,14 @@ import {
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './contexts/AuthContext';
-import TicketsLogin from './pages/TicketsLogin';
-import TicketsManagement from './pages/TicketsManagement';
+import Booking from './pages/Booking';
 import CheckInPage from './pages/CheckInPage';
-import SpeakersPage from './pages/SpeakersPage';
+import Home from './pages/Home';
 import SchedulePage from './pages/SchedulePage';
 import TeamPage from './pages/TeamPage';
+import TicketsLogin from './pages/TicketsLogin';
+import TicketsManagement from './pages/TicketsManagement';
 import TicketsPage from './pages/TicketsPage';
-import Home from './pages/Home'; 
 
 const theme = createTheme({
   palette: {
@@ -55,18 +54,18 @@ const RouterContent: React.FC = () => {
       <ScrollToTop />
       <Routes>
         <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} /> 
-        <Route path="/tickets" element={<Booking />} />
-        {/*  <Route path="/speakers" element={<SpeakersPage/>} /> */}
-        <Route path="/schedule" element={<SchedulePage />} />
-        <Route path="/team" element={<TeamPage />} />
-        <Route path="/tickets" element={<TicketsPage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/tickets" element={<Booking />} />
+          {/*  <Route path="/speakers" element={<SpeakersPage/>} /> */}
+          <Route path="/schedule" element={<SchedulePage />} />
+          <Route path="/team" element={<TeamPage />} />
+          <Route path="/tickets" element={<TicketsPage />} />
         </Route>
 
-        <Route path="/tickets-login" element={<TicketsLogin />} /> 
+        <Route path="/tickets-login" element={<TicketsLogin />} />
         <Route path="/tickets-management" element={<TicketsManagement />} />
         <Route path="/check-in" element={<CheckInPage />} />
-      
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
