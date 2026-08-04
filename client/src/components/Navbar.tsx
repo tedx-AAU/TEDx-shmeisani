@@ -30,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const navLinks = [
     { name: 'بداية السمت', view: 'home' as const },
     { name: 'بنائين السمت', view: 'team' as const },
-    { name: 'صناع السمت', view: 'speakers' as const },
+    //{ name: 'صناع السمت', view: 'speakers' as const },
     { name: 'جدولنا ', view: 'schedule' as const },
     { name: 'التذاكر', view: 'tickets' as const },
   ];

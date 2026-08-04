@@ -35,12 +35,7 @@ const Hero: React.FC<HeroProps> = ({ onSeeSpeakers, onGetTickets }) => {
           >
             Get Tickets
           </button>
-          <button
-            onClick={onSeeSpeakers}
-            className="w-full sm:w-auto bg-transparent border-2 border-white/20 text-white px-12 py-5 rounded-full font-bold text-lg hover:border-red-600 hover:text-red-600 transition-all"
-          >
-            Meet Our Speakers
-          </button>
+
         </div>
       </div>
     </div>

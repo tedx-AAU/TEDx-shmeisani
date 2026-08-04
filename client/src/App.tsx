@@ -57,7 +57,7 @@ const RouterContent: React.FC = () => {
         <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} /> 
         <Route path="/tickets" element={<Booking />} />
-        <Route path="/speakers" element={<SpeakersPage />} />
+        {/*  <Route path="/speakers" element={<SpeakersPage/>} /> */}
         <Route path="/schedule" element={<SchedulePage />} />
         <Route path="/team" element={<TeamPage />} />
         <Route path="/tickets" element={<TicketsPage />} />
